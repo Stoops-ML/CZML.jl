@@ -8,3 +8,9 @@ repos:
         pass_filenames: false
         always_run: true
         language: "system"
+      - id: tests
+        name: "Run tests"
+        entry: "julia --project=. test/runtests.jl"
+        pass_filenames: false
+        always_run: true
+        language: "system"
