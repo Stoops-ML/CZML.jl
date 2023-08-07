@@ -1,6 +1,6 @@
 # CZML.jl
 
-[![Build Status](https://github.com/danielstoops25@gmail.com/CZML.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/danielstoops25@gmail.com/CZML.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/Stoops-ML/CZML.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Stoops-ML/CZML.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 Create CZML files in Julia.
 
