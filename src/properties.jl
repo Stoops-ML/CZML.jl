@@ -702,7 +702,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
 =#
 @with_kw struct Packet
-    id::String = uuid4()
+    id::String = string(uuid4())
     delete::Union{Nothing,Deletable} = nothing
     name::Union{Nothing,String} = nothing
     parent::Union{Nothing,String} = nothing
