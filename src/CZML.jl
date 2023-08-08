@@ -152,7 +152,7 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
         result_type = typeof(result)
 
         # checks
-        check_function_name = Symbol("check_" * String(n))
+        check_function_name = Symbol("check_" * string(n))
         if isdefined(CZML, check_function_name)
             getfield(CZML, check_function_name)(result)
         end
@@ -163,19 +163,19 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
             if isempty(new_result)
                 continue
             end
-            out[String(n)] = new_result
+            out[string(n)] = new_result
         elseif result_type <: CZML_TYPES_ENUMS
-            out[String(n)] = String(Symbol(result))
-        elseif result_type <: DateTime
-            out[String(n)] = Dates.format(result, ISO8601_FORMAT_Z)  # TODO from UTC?
+            out[string(n)] = string(Symbol(result))
+        elseif result_type isa DateTime
+            out[string(n)] = Dates.format(result, ISO8601_FORMAT_Z)  # TODO from UTC?
         elseif result_type <: Union{Interpolatable,Deletable}
             new_result = encodeProperties(result)
             if isempty(new_result)
                 continue
             end
-            merge!(out[String(n)], new_result)
+            merge!(out[string(n)], new_result)
         else
-            out[String(n)] = result
+            out[string(n)] = result
         end
     end
     return out
