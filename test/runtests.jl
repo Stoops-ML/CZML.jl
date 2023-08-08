@@ -17,6 +17,11 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
 - reduce size of fractional-part of floating point numbers
 =#
 @testset "CZML.jl" begin
+    @testset "Default packet id" begin
+        p = Packet()
+        @test p.id isa String
+    end
+
     @testset "CZML Circles and Ellipses" begin
         # https://sandcastle.cesium.com/?src=CZML%20Circles%20and%20Ellipses.html&label=CZML
         str_CZML = """[
