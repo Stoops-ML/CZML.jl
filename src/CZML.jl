@@ -144,7 +144,7 @@ CZML_TYPES_ENUMS = Union{
     ArcTypes.T,
     StripeOrientations.T,
 }
-ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:M:S.sZ"
+ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
 
 using JSON
 
