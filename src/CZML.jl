@@ -1,5 +1,6 @@
 module CZML
 
+# properties
 export InterpolationAlgorithms,
     ExtrapolationTypes,
     ReferenceFrames,
@@ -60,20 +61,25 @@ export InterpolationAlgorithms,
     Font,
     Interpolatable,
     Deletable,
-    CZML_TYPES_ENUMS,
+    Preamble,
+    Packet,
+    Document,
+    TimeInterval
+
+# types
+export CZML_TYPES_ENUMS,
     CZML_TYPES_PROPERTIES,
-    ISO8601_FORMAT_Z,
-    check_rgba,
+    ISO8601_FORMAT_Z
+
+# checks
+export check_rgba,
     check_rgbaf,
     check_Position,
     check_PositionList,
     check_Uri,
-    check_ViewFrom,
-    Preamble,
-    Packet,
-    Document
-include("properties.jl")
+    check_ViewFrom
 
+include("properties.jl")
 CZML_TYPES_PROPERTIES = Union{
     Material,
     PolylineOutlineMaterial,
@@ -228,8 +234,11 @@ function printCZML(
     end
 end
 
-export encodeDocument, encodeProperties, printCZML
+# encodings
+export encodeDocument, encodeProperties, printCZML, encodeDateTime, encodeTimeInterval,
+    encodeVectorOfTimeInterval
 
+# conversions
 export srrm2sddm, sddm2srrm, rrm2ddm, ddm2rrm
 include("conversions.jl")
 
