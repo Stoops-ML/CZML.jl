@@ -113,7 +113,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
     cartesian::Union{Nothing,Vector{Number}} = nothing
     cartographicRadians::Union{Nothing,Vector{Number}} = nothing
     cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
-    references::Vector{String} = nothing
+    references::Union{Nothing,Vector{String}} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
