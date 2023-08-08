@@ -206,7 +206,12 @@ function encodeDocument(document::Document)::Vector{Dict{String,Any}}
     return out
 end
 
-function printCZML(document::Document, filePath::String, exist_okay::Bool = false)::Nothing
+function printCZML(
+    document::Document,
+    filePath::String,
+    exist_okay::Bool = false,
+    indent::Int = 4,
+)::Nothing
     suffix = split(filePath, ".")[2]
     if cmp(lowercase(suffix), "czml") != 0
         error("Suffix must be `.czml``.")
@@ -219,7 +224,7 @@ function printCZML(document::Document, filePath::String, exist_okay::Bool = fals
     end
 
     open(filePath, "w") do f
-        JSON.print(f, encodeDocument(document))
+        JSON.print(f, encodeDocument(document), indent)
     end
 end
 
