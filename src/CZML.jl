@@ -145,6 +145,7 @@ CZML_TYPES_ENUMS = Union{
     ClassificationTypes.T,
     ArcTypes.T,
     StripeOrientations.T,
+    CornerTypes.T,
 }
 ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
 

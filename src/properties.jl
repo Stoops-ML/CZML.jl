@@ -370,7 +370,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
     heightreference::Union{Nothing,HeightReference} = nothing
     extrudedHeight::Union{Nothing,Number} = nothing
     extrudedHeightreference::Union{Nothing,HeightReference} = nothing
-    # cornerType::Union{Nothing,CornerTypes.T} = nothing
+    cornerType::Union{Nothing,CornerTypes.T} = nothing
     granularity::Union{Nothing,Number} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
