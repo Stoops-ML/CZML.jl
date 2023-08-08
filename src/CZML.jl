@@ -82,7 +82,7 @@ export check_rgba,
     check_VectorOfTimeInterval
 
 include("properties.jl")
-CZML_TYPES_PROPERTIES = Union{
+const CZML_TYPES_PROPERTIES = Union{
     Material,
     PolylineOutlineMaterial,
     PolylineGlowMaterial,
@@ -130,7 +130,7 @@ CZML_TYPES_PROPERTIES = Union{
     Preamble,
     Packet,
 }
-CZML_TYPES_ENUMS = Union{
+const CZML_TYPES_ENUMS = Union{
     InterpolationAlgorithms.T,
     ExtrapolationTypes.T,
     ReferenceFrames.T,
@@ -147,7 +147,7 @@ CZML_TYPES_ENUMS = Union{
     StripeOrientations.T,
     CornerTypes.T,
 }
-ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
+const ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
 
 using JSON
 using Dates
