@@ -1,5 +1,6 @@
 module CZML
 
+# properties
 export InterpolationAlgorithms,
     ExtrapolationTypes,
     ReferenceFrames,
@@ -60,21 +61,28 @@ export InterpolationAlgorithms,
     Font,
     Interpolatable,
     Deletable,
-    CZML_TYPES_ENUMS,
+    Preamble,
+    Packet,
+    Document,
+    TimeInterval
+
+# types
+export CZML_TYPES_ENUMS,
     CZML_TYPES_PROPERTIES,
-    ISO8601_FORMAT_Z,
-    check_rgba,
+    ISO8601_FORMAT_Z
+
+# checks
+export check_rgba,
     check_rgbaf,
     check_Position,
     check_PositionList,
     check_Uri,
     check_ViewFrom,
-    Preamble,
-    Packet,
-    Document
-include("properties.jl")
+    check_TimeInterval,
+    check_VectorOfTimeInterval
 
-CZML_TYPES_PROPERTIES = Union{
+include("properties.jl")
+const CZML_TYPES_PROPERTIES = Union{
     Material,
     PolylineOutlineMaterial,
     PolylineGlowMaterial,
@@ -122,7 +130,7 @@ CZML_TYPES_PROPERTIES = Union{
     Preamble,
     Packet,
 }
-CZML_TYPES_ENUMS = Union{
+const CZML_TYPES_ENUMS = Union{
     InterpolationAlgorithms.T,
     ExtrapolationTypes.T,
     ReferenceFrames.T,
@@ -137,10 +145,25 @@ CZML_TYPES_ENUMS = Union{
     ClassificationTypes.T,
     ArcTypes.T,
     StripeOrientations.T,
+    CornerTypes.T,
 }
-ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:M:S.sZ"
+const ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
 
 using JSON
+using Dates
+
+function encodeDateTime(dateTime::DateTime)::String
+    return Dates.format(dateTime, ISO8601_FORMAT_Z)  # TODO from UTC?
+end
+
+function encodeTimeInterval(timeInterval::TimeInterval)::String
+    return encodeDateTime(timeInterval.startTime) * "/" *
+           encodeDateTime(timeInterval.endTime)
+end
+
+function encodeVectorOfTimeInterval(timeIntervals::Vector{TimeInterval})::Vector{String}
+    return map(encodeTimeInterval, timeIntervals)
+end
 
 function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
     out::Dict{String,Any} = Dict()
@@ -152,30 +175,34 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
         result_type = typeof(result)
 
         # checks
-        check_function_name = Symbol("check_" * String(n))
+        check_function_name = Symbol(replace("check_" * string(n), r"{(.+)}" => s"Of\1"))
         if isdefined(CZML, check_function_name)
             getfield(CZML, check_function_name)(result)
         end
 
         # add to packet
-        if result_type <: CZML_TYPES_PROPERTIES
+        encode_function_name =
+            Symbol(replace("encode" * string(result_type), r"{(.+)}" => s"Of\1"))
+        if isdefined(CZML, encode_function_name)
+            out[string(n)] = getfield(CZML, encode_function_name)(result)
+        elseif result_type <: CZML_TYPES_PROPERTIES
             new_result = encodeProperties(result)
             if isempty(new_result)
                 continue
             end
-            out[String(n)] = new_result
+            out[string(n)] = new_result
         elseif result_type <: CZML_TYPES_ENUMS
-            out[String(n)] = String(Symbol(result))
-        elseif result_type <: DateTime
-            out[String(n)] = Dates.format(result, ISO8601_FORMAT_Z)  # TODO from UTC?
+            out[string(n)] = string(Symbol(result))
+        elseif result_type isa DateTime
+            out[string(n)] = Dates.format(result, ISO8601_FORMAT_Z)  # TODO from UTC?
         elseif result_type <: Union{Interpolatable,Deletable}
             new_result = encodeProperties(result)
             if isempty(new_result)
                 continue
             end
-            merge!(out[String(n)], new_result)
+            merge!(out[string(n)], new_result)
         else
-            out[String(n)] = result
+            out[string(n)] = result
         end
     end
     return out
@@ -206,7 +233,12 @@ function encodeDocument(document::Document)::Vector{Dict{String,Any}}
     return out
 end
 
-function printCZML(document::Document, filePath::String, exist_okay::Bool = false)::Nothing
+function printCZML(
+    document::Document,
+    filePath::String,
+    exist_okay::Bool = false,
+    indent::Int = 4,
+)::Nothing
     suffix = split(filePath, ".")[2]
     if cmp(lowercase(suffix), "czml") != 0
         error("Suffix must be `.czml``.")
@@ -219,12 +251,15 @@ function printCZML(document::Document, filePath::String, exist_okay::Bool = fals
     end
 
     open(filePath, "w") do f
-        JSON.print(f, encodeDocument(document))
+        JSON.print(f, encodeDocument(document), indent)
     end
 end
 
-export encodeDocument, encodeProperties, printCZML
+# encodings
+export encodeDocument, encodeProperties, printCZML, encodeDateTime, encodeTimeInterval,
+    encodeVectorOfTimeInterval
 
+# conversions
 export srrm2sddm, sddm2srrm, rrm2ddm, ddm2rrm
 include("conversions.jl")
 

@@ -14,3 +14,10 @@ repos:
         pass_filenames: false
         always_run: true
         language: "system"
+      - id: Pkg
+        name: "Run Pkg commands"
+        entry: "julia --project=. -e 'using Pkg; Pkg.precompile(); Pkg.test(); Pkg.resolve();'"
+        pass_filenames: false
+        always_run: true
+        stages: [push]
+        language: "system"

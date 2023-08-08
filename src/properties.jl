@@ -1,8 +1,10 @@
+using StaticArrays
 using UUIDs
 using Dates
 using Parameters
 using URIs
 include("enums.jl")
+include("types.jl")
 
 #= A property whose value may be deleted.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DeletableProperty
@@ -29,21 +31,22 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
 =#
 @with_kw struct Orientation
-    unitQuaternion::Vector{Number}
+    unitQuaternion::SVector{4,Number}
     reference::Union{Nothing,String} = nothing
     velocityreference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A numeric value which will be linearly interpolated between two values based on an object's distance from camera, in eye coordinates.
+#=A numeric value which will be linearly interpolated between two values based on an object's distance from the camera, in eye coordinates.
+
+    The computed value will interpolate between the near value and the far value while the camera distance falls
+    between the near distance and the far distance, and will be clamped to the near or far value while the distance is
+    less than the near distance or greater than the far distance, respectively.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
 =#
 @with_kw struct NearFarScalar
-    #= The computed value will interpolate between the near value and the far value while the camera distance falls
-    # less than the near distance or greater than the far distance, respectively
-    between the near distance and the far distance, and will be clamped to the near or far value while the distance is =#
-    nearFarScalar::Vector{Number}
+    nearFarScalar::SVector{4,Number}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -62,8 +65,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates
 =#
 @with_kw struct RectangleCoordinates
     reference::Union{Nothing,String} = nothing
-    wsen::Union{Nothing,Vector{Number}} = nothing
-    wsenDegrees::Union{Nothing,Vector{Number}} = nothing
+    wsen::Union{Nothing,SVector{4,Number}} = nothing
+    wsenDegrees::Union{Nothing,SVector{4,Number}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -72,7 +75,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions
 =#
 @with_kw struct BoxDimensions
-    cartesian::Vector{Number}
+    cartesian::SVector{3,Number}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
 end
@@ -99,7 +102,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition
 =#
 @with_kw struct DistanceDisplayCondition
-    distanceDisplayCondition::Vector{Number} = nothing
+    distanceDisplayCondition::SVector{2,Number} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -110,10 +113,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
 =#
 @with_kw struct PositionList
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     cartographicRadians::Union{Nothing,Vector{Number}} = nothing
     cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
-    references::Vector{String} = nothing
+    references::Union{Nothing,Vector{String}} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
@@ -121,7 +124,6 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Uri
 =#
 @with_kw struct Uri
-    # The URI can optionally vary with time
     uri::String = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -131,8 +133,8 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color
 =#
 @with_kw struct Color
-    rgba::Union{Nothing,Vector{Number}} = nothing
-    rgbaf::Union{Nothing,Vector{Number}} = nothing
+    rgba::Union{Nothing,SVector{4,Number}} = nothing
+    rgbaf::Union{Nothing,SVector{4,Number}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -142,7 +144,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial
 =#
 @with_kw struct ImageMaterial
     image::Uri
-    repeat::Union{Nothing,Vector{Integer}} = nothing
+    repeat::Union{Nothing,SVector{2,Integer}} = nothing
     color::Union{Nothing,Color} = nothing
     transparent::Union{Nothing,Bool} = nothing
 end
@@ -189,19 +191,15 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial
     dashPattern::Union{Nothing,Integer} = nothing
 end
 
-# @classmethod
-# def from_list(cls, color):
-#     return cls(color=Color.from_list(color))
-
 #= A material that fills the surface with a two-dimensional grid.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
 =#
 @with_kw struct GridMaterial
     color::Union{Nothing,Color} = nothing
     cellAlpha::Union{Nothing,Number} = nothing
-    lineCount::Union{Nothing,Vector{Integer}} = nothing
-    lineThickness::Union{Nothing,Vector{Number}} = nothing
-    lineOffset::Union{Nothing,Vector{Number}} = nothing
+    lineCount::Union{Nothing,SVector{2,Integer}} = nothing
+    lineThickness::Union{Nothing,SVector{2,Number}} = nothing
+    lineOffset::Union{Nothing,SVector{2,Number}} = nothing
 end
 
 #= A material that fills the surface with alternating colors.
@@ -221,81 +219,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial
 @with_kw struct CheckerboardMaterial
     evenColor::Union{Nothing,Color} = nothing
     oddColor::Union{Nothing,Color} = nothing
-    repeat::Union{Nothing,Vector{Integer}} = nothing
+    repeat::Union{Nothing,SVector{2,Integer}} = nothing
 end
-
-# @classmethod
-# # Determines if the input is a valid color
-# def is_valid(cls, color):
-# # [R, G, B] or [R, G, B, A]
-#     if (
-#         isinstance(color, (list, tuple))
-#         and all([issubclass(type(v), int) for v in color])
-#         and (3 <= len(color) <= 4)
-#     ):
-#         return all(0 <= v <= 255 for v in color)
-# # [r, g, b] or [r, g, b, a] (float)
-#     elif (
-#         isinstance(color, (list, tuple))
-#         and all([issubclass(type(v), float) for v in color])
-#         and (3 <= len(color) <= 4)
-#     ):
-#         return all(0 <= v <= 1 for v in color)
-# # Hexadecimal RGBA
-#     elif issubclass(type(color), int):
-#         return 0 <= color <= 0xFFFFFFFF
-# # RGBA string
-#     elif isinstance(color, str):
-#         try:
-#             n = nothing
-#             return 0 <= n <= 0xFFFFFFFF
-#         except ValueError:
-#             return False
-#     return False
-
-# @classmethod
-# def from_list(cls, color):
-#     if all(issubclass(type(v), int) for v in color):
-#         if len(color) == 3:
-#             color = nothing
-#         else:
-#             color = nothing
-
-#         return cls(rgba=RgbaValue(values=color))
-#     else:
-#         if len(color) == 3:
-#             color = nothing
-#         else:
-#             color = nothing
-
-#         return cls(rgbaf=RgbafValue(values=color))
-
-# @classmethod
-# def from_tuple(cls, color):
-#     return cls.from_list(list(color))
-
-# @classmethod
-# def from_hex(cls, color):
-#     if color > 0xFFFFFF:
-#         values = nothing
-#             (color & 0xFF000000) >> 24,
-#             (color & 0x00FF0000) >> 16,
-#             (color & 0x0000FF00) >> 8,
-#             (color & 0x000000FF) >> 0,
-#         ]
-#     else:
-#         values = nothing
-#             (color & 0xFF0000) >> 16,
-#             (color & 0x00FF00) >> 8,
-#             (color & 0x0000FF) >> 0,
-#             0xFF,
-#         ]
-
-#     return cls.from_list(values)
-
-# @classmethod
-# def from_str(cls, color):
-#     return cls.from_hex(int(color.rsplit("#")[-1], 16))
 
 #= A definition of how a surface is colored or shaded.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Material
@@ -327,21 +252,21 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
 =#
 @with_kw struct Position
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,Vector{Number}} = nothing
-    cartographicRadians::Union{Nothing,Vector{Number}} = nothing
-    cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
-    cartesianVelocity::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
+    cartographicRadians::Union{Nothing,SVector{3,Number}} = nothing
+    cartographicDegrees::Union{Nothing,SVector{3,Number}} = nothing
+    cartesianVelocity::Union{Nothing,SVector{6,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= suggested initial camera position offset when tracking this obje
+#=Suggested initial camera position offset when tracking this object.
+ViewFrom can optionally vary over time.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
 =#
 @with_kw struct ViewFrom
-    #  can optionally vary over time.
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -351,17 +276,16 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
 =#
 @with_kw struct EllipsoidRadii
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A corridor , which is a shape defined by a centerline and width that conforms to 
+#=A corridor , which is a shape defined by a centerline and width that conforms to the curvature of the body shape. It can can optionally be extruded into a volume.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
 =#
 @with_kw struct Corridor
-    #  of the body shape. It can can optionally be extruded into a volume.
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
     width::Union{Nothing,Number} = nothing
@@ -369,7 +293,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
     heightreference::Union{Nothing,HeightReference} = nothing
     extrudedHeight::Union{Nothing,Number} = nothing
     extrudedHeightreference::Union{Nothing,HeightReference} = nothing
-    # cornerType::Union{Nothing,CornerTypes.T} = nothing
+    cornerType::Union{Nothing,CornerTypes.T} = nothing
     granularity::Union{Nothing,Number} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
@@ -486,10 +410,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid
 @with_kw struct Ellipsoid
     radii::EllipsoidRadii
     innerRadii::Union{Nothing,EllipsoidRadii} = nothing
-    minimumClock::Union{Nothing,Vector{Number}} = nothing
-    maximumClock::Union{Nothing,Vector{Number}} = nothing
-    minimumCone::Union{Nothing,Vector{Number}} = nothing
-    maximumCone::Union{Nothing,Vector{Number}} = nothing
+    minimumClock::Union{Nothing,Number} = nothing
+    maximumClock::Union{Nothing,Number} = nothing
+    minimumCone::Union{Nothing,Number} = nothing
+    maximumCone::Union{Nothing,Number} = nothing
     show::Union{Nothing,Bool} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
     fill::Union{Nothing,Bool} = nothing
@@ -520,11 +444,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= A cartographic rectangle, which conforms to the curvature of the globe 
+#=A cartographic rectangle, which conforms to the curvature of the globe and can be placed on the surface or at altitude and can optionally be extruded into a volume.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle
 =#
 @with_kw struct Rectangle
-    #  be placed on the surface or at altitude and can optionally be extruded into a volume.
     coordinates::RectangleCoordinates
     show::Union{Nothing,Bool} = nothing
     height::Union{Nothing,Number} = nothing
@@ -554,16 +477,17 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
     #= Eye coordinates are a left-handed coordinate system
     the Y-axis poitns up, and the Z-axis points into the screen.
     where the X-axis points toward the viewer's right, =#
-    cartesian::Vector{Number} = nothing
+    cartesian::SVector{3,Number} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= Initial settings for a simulated clock when a document is load
+#=Initial settings for a simulated clock when a document is loaded.
+
+The start and stop time are configured using the interval property.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock
 =#
 @with_kw struct Clock
-    # The start and stop time are configured using the interval property.
     currentTime::DateTime
     multiplier::Union{Nothing,Number} = nothing
     range::Union{Nothing,ClockRanges.T} = nothing
@@ -614,11 +538,11 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/TileSet
     maximumScreenSpaceError::Union{Nothing,Number} = nothing
 end
 
-#= A two-dimensional wall defined as a line strip and optional maximum and minimum heigh
+#=A two-dimensional wall defined as a line strip and optional maximum and minimum heights.
+It conforms to the curvature of the globe and can be placed along the surface or at altitude.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall
 =#
 @with_kw struct Wall
-    #  conforms to the curvature of the globe and can be placed along the surface or at altitude.
     show::Union{Nothing,Bool} = nothing
     positions::PositionList
     minimumHeights::Union{Nothing,Number} = nothing
@@ -647,23 +571,33 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     fillColor::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
     outlineWidth::Union{Nothing,Number} = nothing
-    pixelOffset::Union{Nothing,Vector{Number}} = nothing
+    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
+    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
 
-#= A billboard, or viewport-aligned ima
+#=A billboard, or viewport-aligned image.
+The billboard is positioned in the scene by the position property.
+A billboard is sometimes called a marker.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
 =#
 @with_kw struct Billboard
-    # A billboard is sometimes called a marker. The billboard is positioned in the scene by the position property.
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,Number} = nothing
-    eyeOffset::Union{Nothing,Vector{Number}} = nothing
+    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
+    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
     color::Union{Nothing,Color} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
+end
+
+# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
+@with_kw struct NodeTransformation
+    translation::Union{Nothing,SVector{3,Number}} = nothing
+    rotation::Union{Nothing,SVector{4,Number}} = nothing
+    scale::Union{Nothing,SVector{3,Number}} = nothing
 end
 
 #= A 3D model.
@@ -685,7 +619,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
     colorBlendMode::Union{Nothing,ColorBlendModes.T} = nothing
     colorBlendAmount::Union{Nothing,Number} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
-    # nodeTransformations::Union{Nothing,NodeTransformations} = nothing # TODO
+    nodeTransformations::Union{Nothing,NodeTransformation} = nothing
     articulations = nothing  # TODO
 end
 
@@ -702,12 +636,12 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
 =#
 @with_kw struct Packet
-    id::String = uuid4()
+    id::String = string(uuid4())
     delete::Union{Nothing,Deletable} = nothing
     name::Union{Nothing,String} = nothing
     parent::Union{Nothing,String} = nothing
     description::Union{Nothing,String} = nothing
-    # availability::Union{Nothing,} = nothing # TODO
+    availability::Union{Nothing,TimeInterval,Vector{TimeInterval}} = nothing
     # properties::Union{Nothing,} = nothing # TODO
     position::Union{Nothing,Position,PositionList} = nothing
     orientation::Union{Nothing,Orientation} = nothing
@@ -729,11 +663,12 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
     wall::Union{Nothing,Wall} = nothing
 end
 
+#=A document containing a preamble and one or more packets=#
 struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
 
-function check_rgba(rgba::Vector{Number})::Nothing
+function check_rgba(rgba::SVector{4,Number})::Nothing
     if !(length(rgba) == 4 || mod(length(rgba), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
@@ -758,7 +693,7 @@ function check_rgba(rgba::Vector{Number})::Nothing
     end
 end
 
-function check_rgbaf(rgbaf::Vector{Number})::Nothing
+function check_rgbaf(rgbaf::SVector{4,Number})::Nothing
     if !(length(rgbaf) == 4 || mod(length(rgbaf), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
@@ -819,4 +754,14 @@ function check_ViewFrom(viewFrom::ViewFrom)::Nothing
     if 0 ≥ sum(map(isnothing, [viewFrom.cartesian viewFrom.reference]))
         error("One of cartesian or reference must be given")
     end
+end
+
+function check_TimeInterval(timeInterval::TimeInterval)::Nothing
+    if timeInterval.endTime < timeInterval.startTime
+        error("Time interval end time must be after start time.")
+    end
+end
+
+function check_VectorOfTimeInterval(timeIntervals::Vector{TimeInterval})::Nothing
+    map(check_TimeInterval, timeIntervals)
 end

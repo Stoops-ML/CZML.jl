@@ -7,6 +7,13 @@ using EnumX
     HERMITE
 end
 
+# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CornerTypeValue
+@enumx CornerTypes begin
+    ROUNDED
+    MITERED
+    BEVELED
+end
+
 # The type of extrapolation to perform when a value is requested at a time after any available samples.
 @enumx ExtrapolationTypes begin
     NONE
