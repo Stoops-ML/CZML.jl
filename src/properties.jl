@@ -590,6 +590,13 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
 
+# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
+@with_kw struct NodeTransformation
+    translation::Union{Nothing,Vector{Number}} = nothing
+    rotation::Union{Nothing,Vector{Number}} = nothing
+    scale::Union{Nothing,Vector{Number}} = nothing
+end
+
 #= A 3D model.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
 =#
@@ -609,7 +616,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
     colorBlendMode::Union{Nothing,ColorBlendModes.T} = nothing
     colorBlendAmount::Union{Nothing,Number} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
-    # nodeTransformations::Union{Nothing,NodeTransformations} = nothing # TODO
+    nodeTransformations::Union{Nothing,NodeTransformation} = nothing
     articulations = nothing  # TODO
 end
 
