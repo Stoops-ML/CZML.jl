@@ -37,13 +37,14 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A numeric value which will be linearly interpolated between two values based on an object's distance from camera, in eye coordinates.
+#=A numeric value which will be linearly interpolated between two values based on an object's distance from the camera, in eye coordinates.
+
+    The computed value will interpolate between the near value and the far value while the camera distance falls
+    between the near distance and the far distance, and will be clamped to the near or far value while the distance is
+    less than the near distance or greater than the far distance, respectively.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
 =#
 @with_kw struct NearFarScalar
-    #= The computed value will interpolate between the near value and the far value while the camera distance falls
-    # less than the near distance or greater than the far distance, respectively
-    between the near distance and the far distance, and will be clamped to the near or far value while the distance is =#
     nearFarScalar::Vector{Number}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -122,7 +123,6 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Uri
 =#
 @with_kw struct Uri
-    # The URI can optionally vary with time
     uri::String = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -190,10 +190,6 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial
     dashPattern::Union{Nothing,Integer} = nothing
 end
 
-# @classmethod
-# def from_list(cls, color):
-#     return cls(color=Color.from_list(color))
-
 #= A material that fills the surface with a two-dimensional grid.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
 =#
@@ -224,79 +220,6 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial
     oddColor::Union{Nothing,Color} = nothing
     repeat::Union{Nothing,Vector{Integer}} = nothing
 end
-
-# @classmethod
-# # Determines if the input is a valid color
-# def is_valid(cls, color):
-# # [R, G, B] or [R, G, B, A]
-#     if (
-#         isinstance(color, (list, tuple))
-#         and all([issubclass(type(v), int) for v in color])
-#         and (3 <= len(color) <= 4)
-#     ):
-#         return all(0 <= v <= 255 for v in color)
-# # [r, g, b] or [r, g, b, a] (float)
-#     elif (
-#         isinstance(color, (list, tuple))
-#         and all([issubclass(type(v), float) for v in color])
-#         and (3 <= len(color) <= 4)
-#     ):
-#         return all(0 <= v <= 1 for v in color)
-# # Hexadecimal RGBA
-#     elif issubclass(type(color), int):
-#         return 0 <= color <= 0xFFFFFFFF
-# # RGBA string
-#     elif isinstance(color, str):
-#         try:
-#             n = nothing
-#             return 0 <= n <= 0xFFFFFFFF
-#         except ValueError:
-#             return False
-#     return False
-
-# @classmethod
-# def from_list(cls, color):
-#     if all(issubclass(type(v), int) for v in color):
-#         if len(color) == 3:
-#             color = nothing
-#         else:
-#             color = nothing
-
-#         return cls(rgba=RgbaValue(values=color))
-#     else:
-#         if len(color) == 3:
-#             color = nothing
-#         else:
-#             color = nothing
-
-#         return cls(rgbaf=RgbafValue(values=color))
-
-# @classmethod
-# def from_tuple(cls, color):
-#     return cls.from_list(list(color))
-
-# @classmethod
-# def from_hex(cls, color):
-#     if color > 0xFFFFFF:
-#         values = nothing
-#             (color & 0xFF000000) >> 24,
-#             (color & 0x00FF0000) >> 16,
-#             (color & 0x0000FF00) >> 8,
-#             (color & 0x000000FF) >> 0,
-#         ]
-#     else:
-#         values = nothing
-#             (color & 0xFF0000) >> 16,
-#             (color & 0x00FF00) >> 8,
-#             (color & 0x0000FF) >> 0,
-#             0xFF,
-#         ]
-
-#     return cls.from_list(values)
-
-# @classmethod
-# def from_str(cls, color):
-#     return cls.from_hex(int(color.rsplit("#")[-1], 16))
 
 #= A definition of how a surface is colored or shaded.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Material
@@ -337,11 +260,11 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= suggested initial camera position offset when tracking this obje
+#=Suggested initial camera position offset when tracking this object.
+ViewFrom can optionally vary over time.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
 =#
 @with_kw struct ViewFrom
-    #  can optionally vary over time.
     cartesian::Union{Nothing,Vector{Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -358,11 +281,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A corridor , which is a shape defined by a centerline and width that conforms to 
+#=A corridor , which is a shape defined by a centerline and width that conforms to the curvature of the body shape. It can can optionally be extruded into a volume.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
 =#
 @with_kw struct Corridor
-    #  of the body shape. It can can optionally be extruded into a volume.
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
     width::Union{Nothing,Number} = nothing
@@ -521,11 +443,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= A cartographic rectangle, which conforms to the curvature of the globe 
+#=A cartographic rectangle, which conforms to the curvature of the globe and can be placed on the surface or at altitude and can optionally be extruded into a volume.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle
 =#
 @with_kw struct Rectangle
-    #  be placed on the surface or at altitude and can optionally be extruded into a volume.
     coordinates::RectangleCoordinates
     show::Union{Nothing,Bool} = nothing
     height::Union{Nothing,Number} = nothing
@@ -560,11 +481,12 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= Initial settings for a simulated clock when a document is load
+#=Initial settings for a simulated clock when a document is loaded.
+
+The start and stop time are configured using the interval property.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock
 =#
 @with_kw struct Clock
-    # The start and stop time are configured using the interval property.
     currentTime::DateTime
     multiplier::Union{Nothing,Number} = nothing
     range::Union{Nothing,ClockRanges.T} = nothing
@@ -615,11 +537,11 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/TileSet
     maximumScreenSpaceError::Union{Nothing,Number} = nothing
 end
 
-#= A two-dimensional wall defined as a line strip and optional maximum and minimum heigh
+#=A two-dimensional wall defined as a line strip and optional maximum and minimum heights.
+It conforms to the curvature of the globe and can be placed along the surface or at altitude.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall
 =#
 @with_kw struct Wall
-    #  conforms to the curvature of the globe and can be placed along the surface or at altitude.
     show::Union{Nothing,Bool} = nothing
     positions::PositionList
     minimumHeights::Union{Nothing,Number} = nothing
@@ -653,11 +575,12 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
 
-#= A billboard, or viewport-aligned ima
+#=A billboard, or viewport-aligned image.
+The billboard is positioned in the scene by the position property.
+A billboard is sometimes called a marker.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
 =#
 @with_kw struct Billboard
-    # A billboard is sometimes called a marker. The billboard is positioned in the scene by the position property.
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,Number} = nothing
