@@ -1,6 +1,7 @@
 using JSON
 using CZML
 using Test
+using Dates
 
 """
 Convert CZML string from Cesium Sandcastle to a Vector of CZML packets.
@@ -17,6 +18,107 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
 - reduce size of fractional-part of floating point numbers
 =#
 @testset "CZML.jl" begin
+    @testset "encodeDateTime" begin
+        @test "2012-08-04T16:00:00Z" == encodeDateTime(DateTime(2012, 8, 4, 16, 0, 0))
+    end
+
+    @testset "encodeTimeInterval" begin
+        @test "2012-08-04T16:00:00Z/2012-08-05T16:00:00Z" == encodeTimeInterval(
+            TimeInterval(;
+                startTime = DateTime(2012, 8, 4, 16, 0, 0),
+                endTime = DateTime(2012, 8, 5, 16, 0, 0),
+            ),
+        )
+    end
+
+    @testset "encodeVectorOfTimeInterval" begin
+        @test [
+            "2012-08-04T16:00:00Z/2012-08-05T16:00:00Z",
+            "2012-08-06T16:00:00Z/2012-08-07T16:00:00Z",
+        ] == encodeVectorOfTimeInterval([
+            TimeInterval(;
+                startTime = DateTime(2012, 8, 4, 16, 0, 0),
+                endTime = DateTime(2012, 8, 5, 16, 0, 0),
+            ),
+            TimeInterval(;
+                startTime = DateTime(2012, 8, 6, 16, 0, 0),
+                endTime = DateTime(2012, 8, 7, 16, 0, 0),
+            ),
+        ])
+    end
+
+    @testset "Availability" begin
+        p0 = Preamble(;
+            clock = Clock(;
+                currentTime = DateTime(2012, 8, 4, 16, 0, 0, 2),
+                multiplier = 20000,
+            ),
+        )
+        p1 = Packet(;
+            availability = TimeInterval(;
+                startTime = DateTime(2012, 8, 10, 16, 0, 0),
+                endTime = DateTime(2012, 8, 11, 16, 0, 0),
+            ),
+            polygon = Polygon(;
+                show = true,
+                positions = PositionList(;
+                    cartographicDegrees = [
+                        -50,
+                        20,
+                        0,
+                        -50,
+                        40,
+                        0,
+                        -40,
+                        40,
+                        0,
+                        -40,
+                        20,
+                        0,
+                    ],
+                ),
+            ),
+        )
+        p2 = Packet(;
+            name = "Dynamic Polygon with Intervals",
+            availability = [
+                TimeInterval(;
+                    startTime = DateTime(2012, 8, 4, 16, 0, 0),
+                    endTime = DateTime(2012, 8, 5, 16, 0, 0),
+                ),
+                TimeInterval(;
+                    startTime = DateTime(2012, 8, 6, 16, 0, 0),
+                    endTime = DateTime(2012, 8, 7, 16, 0, 0),
+                ),
+            ],
+            polygon = Polygon(;
+                show = true,
+                positions = PositionList(;
+                    cartographicDegrees = [
+                        -50,
+                        20,
+                        0,
+                        -50,
+                        40,
+                        0,
+                        -40,
+                        40,
+                        0,
+                        -40,
+                        20,
+                        0,
+                    ],
+                ),
+            ),
+        )
+        d = Document([p0, p1, p2])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+    end
+
     @testset "Default packet id" begin
         p = Packet()
         @test p.id isa String

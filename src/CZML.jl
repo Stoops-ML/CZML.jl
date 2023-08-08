@@ -77,7 +77,9 @@ export check_rgba,
     check_Position,
     check_PositionList,
     check_Uri,
-    check_ViewFrom
+    check_ViewFrom,
+    check_TimeInterval,
+    check_VectorOfTimeInterval
 
 include("properties.jl")
 CZML_TYPES_PROPERTIES = Union{
@@ -147,6 +149,20 @@ CZML_TYPES_ENUMS = Union{
 ISO8601_FORMAT_Z = "yyyy-mm-ddTHH:MM:SSZ"
 
 using JSON
+using Dates
+
+function encodeDateTime(dateTime::DateTime)::String
+    return Dates.format(dateTime, ISO8601_FORMAT_Z)  # TODO from UTC?
+end
+
+function encodeTimeInterval(timeInterval::TimeInterval)::String
+    return encodeDateTime(timeInterval.startTime) * "/" *
+           encodeDateTime(timeInterval.endTime)
+end
+
+function encodeVectorOfTimeInterval(timeIntervals::Vector{TimeInterval})::Vector{String}
+    return map(encodeTimeInterval, timeIntervals)
+end
 
 function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
     out::Dict{String,Any} = Dict()
@@ -158,13 +174,17 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
         result_type = typeof(result)
 
         # checks
-        check_function_name = Symbol("check_" * string(n))
+        check_function_name = Symbol(replace("check_" * string(n), r"{(.+)}" => s"Of\1"))
         if isdefined(CZML, check_function_name)
             getfield(CZML, check_function_name)(result)
         end
 
         # add to packet
-        if result_type <: CZML_TYPES_PROPERTIES
+        encode_function_name =
+            Symbol(replace("encode" * string(result_type), r"{(.+)}" => s"Of\1"))
+        if isdefined(CZML, encode_function_name)
+            out[string(n)] = getfield(CZML, encode_function_name)(result)
+        elseif result_type <: CZML_TYPES_PROPERTIES
             new_result = encodeProperties(result)
             if isempty(new_result)
                 continue

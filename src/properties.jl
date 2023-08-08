@@ -3,6 +3,7 @@ using Dates
 using Parameters
 using URIs
 include("enums.jl")
+include("types.jl")
 
 #= A property whose value may be deleted.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DeletableProperty
@@ -707,7 +708,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
     name::Union{Nothing,String} = nothing
     parent::Union{Nothing,String} = nothing
     description::Union{Nothing,String} = nothing
-    # availability::Union{Nothing,} = nothing # TODO
+    availability::Union{Nothing,TimeInterval,Vector{TimeInterval}} = nothing
     # properties::Union{Nothing,} = nothing # TODO
     position::Union{Nothing,Position,PositionList} = nothing
     orientation::Union{Nothing,Orientation} = nothing
@@ -819,4 +820,14 @@ function check_ViewFrom(viewFrom::ViewFrom)::Nothing
     if 0 ≥ sum(map(isnothing, [viewFrom.cartesian viewFrom.reference]))
         error("One of cartesian or reference must be given")
     end
+end
+
+function check_TimeInterval(timeInterval::TimeInterval)::Nothing
+    if timeInterval.endTime < timeInterval.startTime
+        error("Time interval end time must be after start time.")
+    end
+end
+
+function check_VectorOfTimeInterval(timeIntervals::Vector{TimeInterval})::Nothing
+    map(check_TimeInterval, timeIntervals)
 end
