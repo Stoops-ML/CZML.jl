@@ -1,3 +1,4 @@
+using StaticArrays
 using UUIDs
 using Dates
 using Parameters
@@ -30,7 +31,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
 =#
 @with_kw struct Orientation
-    unitQuaternion::Vector{Number}
+    unitQuaternion::SVector{4,Number}
     reference::Union{Nothing,String} = nothing
     velocityreference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -45,7 +46,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
 =#
 @with_kw struct NearFarScalar
-    nearFarScalar::Vector{Number}
+    nearFarScalar::SVector{4,Number}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -64,8 +65,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates
 =#
 @with_kw struct RectangleCoordinates
     reference::Union{Nothing,String} = nothing
-    wsen::Union{Nothing,Vector{Number}} = nothing
-    wsenDegrees::Union{Nothing,Vector{Number}} = nothing
+    wsen::Union{Nothing,SVector{4,Number}} = nothing
+    wsenDegrees::Union{Nothing,SVector{4,Number}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -74,7 +75,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions
 =#
 @with_kw struct BoxDimensions
-    cartesian::Vector{Number}
+    cartesian::SVector{3,Number}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
 end
@@ -101,7 +102,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition
 =#
 @with_kw struct DistanceDisplayCondition
-    distanceDisplayCondition::Vector{Number} = nothing
+    distanceDisplayCondition::SVector{2,Number} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -112,7 +113,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
 =#
 @with_kw struct PositionList
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     cartographicRadians::Union{Nothing,Vector{Number}} = nothing
     cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
     references::Union{Nothing,Vector{String}} = nothing
@@ -132,8 +133,8 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color
 =#
 @with_kw struct Color
-    rgba::Union{Nothing,Vector{Number}} = nothing
-    rgbaf::Union{Nothing,Vector{Number}} = nothing
+    rgba::Union{Nothing,SVector{4,Number}} = nothing
+    rgbaf::Union{Nothing,SVector{4,Number}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -143,7 +144,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial
 =#
 @with_kw struct ImageMaterial
     image::Uri
-    repeat::Union{Nothing,Vector{Integer}} = nothing
+    repeat::Union{Nothing,SVector{2,Integer}} = nothing
     color::Union{Nothing,Color} = nothing
     transparent::Union{Nothing,Bool} = nothing
 end
@@ -196,9 +197,9 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
 @with_kw struct GridMaterial
     color::Union{Nothing,Color} = nothing
     cellAlpha::Union{Nothing,Number} = nothing
-    lineCount::Union{Nothing,Vector{Integer}} = nothing
-    lineThickness::Union{Nothing,Vector{Number}} = nothing
-    lineOffset::Union{Nothing,Vector{Number}} = nothing
+    lineCount::Union{Nothing,SVector{2,Integer}} = nothing
+    lineThickness::Union{Nothing,SVector{2,Number}} = nothing
+    lineOffset::Union{Nothing,SVector{2,Number}} = nothing
 end
 
 #= A material that fills the surface with alternating colors.
@@ -218,7 +219,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial
 @with_kw struct CheckerboardMaterial
     evenColor::Union{Nothing,Color} = nothing
     oddColor::Union{Nothing,Color} = nothing
-    repeat::Union{Nothing,Vector{Integer}} = nothing
+    repeat::Union{Nothing,SVector{2,Integer}} = nothing
 end
 
 #= A definition of how a surface is colored or shaded.
@@ -251,10 +252,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
 =#
 @with_kw struct Position
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,Vector{Number}} = nothing
-    cartographicRadians::Union{Nothing,Vector{Number}} = nothing
-    cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
-    cartesianVelocity::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
+    cartographicRadians::Union{Nothing,SVector{3,Number}} = nothing
+    cartographicDegrees::Union{Nothing,SVector{3,Number}} = nothing
+    cartesianVelocity::Union{Nothing,SVector{6,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -265,7 +266,7 @@ ViewFrom can optionally vary over time.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
 =#
 @with_kw struct ViewFrom
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -275,7 +276,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
 =#
 @with_kw struct EllipsoidRadii
-    cartesian::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,Number}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -476,7 +477,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
     #= Eye coordinates are a left-handed coordinate system
     the Y-axis poitns up, and the Z-axis points into the screen.
     where the X-axis points toward the viewer's right, =#
-    cartesian::Vector{Number} = nothing
+    cartesian::SVector{3,Number} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -570,7 +571,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     fillColor::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
     outlineWidth::Union{Nothing,Number} = nothing
-    pixelOffset::Union{Nothing,Vector{Number}} = nothing
+    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
+    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
@@ -584,7 +586,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,Number} = nothing
-    eyeOffset::Union{Nothing,Vector{Number}} = nothing
+    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
+    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
     color::Union{Nothing,Color} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
@@ -592,9 +595,9 @@ end
 
 # https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
 @with_kw struct NodeTransformation
-    translation::Union{Nothing,Vector{Number}} = nothing
-    rotation::Union{Nothing,Vector{Number}} = nothing
-    scale::Union{Nothing,Vector{Number}} = nothing
+    translation::Union{Nothing,SVector{3,Number}} = nothing
+    rotation::Union{Nothing,SVector{4,Number}} = nothing
+    scale::Union{Nothing,SVector{3,Number}} = nothing
 end
 
 #= A 3D model.
@@ -665,7 +668,7 @@ struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
 
-function check_rgba(rgba::Vector{Number})::Nothing
+function check_rgba(rgba::SVector{4,Number})::Nothing
     if !(length(rgba) == 4 || mod(length(rgba), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
@@ -690,7 +693,7 @@ function check_rgba(rgba::Vector{Number})::Nothing
     end
 end
 
-function check_rgbaf(rgbaf::Vector{Number})::Nothing
+function check_rgbaf(rgbaf::SVector{4,Number})::Nothing
     if !(length(rgbaf) == 4 || mod(length(rgbaf), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
