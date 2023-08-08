@@ -409,10 +409,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid
 @with_kw struct Ellipsoid
     radii::EllipsoidRadii
     innerRadii::Union{Nothing,EllipsoidRadii} = nothing
-    minimumClock::Union{Nothing,Vector{Number}} = nothing
-    maximumClock::Union{Nothing,Vector{Number}} = nothing
-    minimumCone::Union{Nothing,Vector{Number}} = nothing
-    maximumCone::Union{Nothing,Vector{Number}} = nothing
+    minimumClock::Union{Nothing,Number} = nothing
+    maximumClock::Union{Nothing,Number} = nothing
+    minimumCone::Union{Nothing,Number} = nothing
+    maximumCone::Union{Nothing,Number} = nothing
     show::Union{Nothing,Bool} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
     fill::Union{Nothing,Bool} = nothing
