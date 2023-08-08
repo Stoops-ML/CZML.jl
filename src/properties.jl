@@ -730,6 +730,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
     wall::Union{Nothing,Wall} = nothing
 end
 
+#=A document containing a preamble and one or more packets=#
 struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
