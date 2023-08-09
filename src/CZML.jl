@@ -238,7 +238,7 @@ function printCZML(
     document::Document,
     filePath::String,
     exist_okay::Bool = false,
-    indent::Int = 4,
+    indent::Integer = 4,
 )::Nothing
     suffix = split(filePath, ".")[2]
     if cmp(lowercase(suffix), "czml") != 0
