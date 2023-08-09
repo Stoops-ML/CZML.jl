@@ -133,8 +133,8 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color
 =#
 @with_kw struct Color
-    rgba::Union{Nothing,SVector{4,Number}} = nothing
-    rgbaf::Union{Nothing,SVector{4,Number}} = nothing
+    rgba::Union{Nothing,Vector{Number}} = nothing
+    rgbaf::Union{Nothing,Vector{Number}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -668,7 +668,7 @@ struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
 
-function check_rgba(rgba::SVector{4,Number})::Nothing
+function check_rgba(rgba::Vector{Number})::Nothing
     if !(length(rgba) == 4 || mod(length(rgba), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
@@ -693,7 +693,7 @@ function check_rgba(rgba::SVector{4,Number})::Nothing
     end
 end
 
-function check_rgbaf(rgbaf::SVector{4,Number})::Nothing
+function check_rgbaf(rgbaf::Vector{Number})::Nothing
     if !(length(rgbaf) == 4 || mod(length(rgbaf), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
