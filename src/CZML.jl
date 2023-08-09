@@ -175,14 +175,15 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
         result_type = typeof(result)
 
         # checks
-        check_function_name = Symbol(replace("check_" * string(n), r"{(.+)}" => s"Of\1"))
+        check_function_name =
+            Symbol(replace("check_" * string(n), r"{" => s"Of", r"}" => s""))
         if isdefined(CZML, check_function_name)
             getfield(CZML, check_function_name)(result)
         end
 
         # add to packet
         encode_function_name =
-            Symbol(replace("encode" * string(result_type), r"{(.+)}" => s"Of\1"))
+            Symbol(replace("encode" * string(result_type), r"{" => s"Of", r"}" => s""))
         if isdefined(CZML, encode_function_name)
             out[string(n)] = getfield(CZML, encode_function_name)(result)
         elseif result_type <: CZML_TYPES_PROPERTIES
