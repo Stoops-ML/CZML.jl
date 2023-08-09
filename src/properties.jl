@@ -22,16 +22,16 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/InterpolatableProperty
     interpolationAlgorithm::Union{Nothing,InterpolationAlgorithms.T} = nothing
     interpolationDegree::Union{Nothing,Integer} = nothing
     forwardExtrapolationType::Union{Nothing,ExtrapolationTypes.T} = nothing
-    forwardExtrapolationDuration::Union{Nothing,Number} = nothing
+    forwardExtrapolationDuration::Union{Nothing,<:Real} = nothing
     backwardExtrapolationType::Union{Nothing,ExtrapolationTypes.T} = nothing
-    backwardExtrapolationDuration::Union{Nothing,Number} = nothing
+    backwardExtrapolationDuration::Union{Nothing,<:Real} = nothing
 end
 
 #= Defines an orientati and transforms it to the Earth fixed axes.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
 =#
 @with_kw struct Orientation
-    unitQuaternion::SVector{4,Number}
+    unitQuaternion::SVector{4,<:Real}
     reference::Union{Nothing,String} = nothing
     velocityreference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -46,7 +46,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
 =#
 @with_kw struct NearFarScalar
-    nearFarScalar::SVector{4,Number}
+    nearFarScalar::SVector{4,<:Real}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -65,8 +65,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates
 =#
 @with_kw struct RectangleCoordinates
     reference::Union{Nothing,String} = nothing
-    wsen::Union{Nothing,SVector{4,Number}} = nothing
-    wsenDegrees::Union{Nothing,SVector{4,Number}} = nothing
+    wsen::Union{Nothing,SVector{4,<:Real}} = nothing
+    wsenDegrees::Union{Nothing,SVector{4,<:Real}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -75,7 +75,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions
 =#
 @with_kw struct BoxDimensions
-    cartesian::SVector{3,Number}
+    cartesian::SVector{3,<:Real}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
 end
@@ -102,7 +102,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition
 =#
 @with_kw struct DistanceDisplayCondition
-    distanceDisplayCondition::SVector{2,Number} = nothing
+    distanceDisplayCondition::SVector{2,<:Real} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -113,9 +113,9 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
 =#
 @with_kw struct PositionList
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,SVector{3,Number}} = nothing
-    cartographicRadians::Union{Nothing,Vector{Number}} = nothing
-    cartographicDegrees::Union{Nothing,Vector{Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartographicRadians::Union{Nothing,Vector{<:Real}} = nothing
+    cartographicDegrees::Union{Nothing,Vector{<:Real}} = nothing
     references::Union{Nothing,Vector{String}} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -133,8 +133,8 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color
 =#
 @with_kw struct Color
-    rgba::Union{Nothing,SVector{4,Number}} = nothing
-    rgbaf::Union{Nothing,SVector{4,Number}} = nothing
+    rgba::Union{Nothing,Vector{<:Real}} = nothing
+    rgbaf::Union{Nothing,Vector{<:Real}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -162,7 +162,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineOutlineMateria
 @with_kw struct PolylineOutlineMaterial
     color::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
 end
 
 #= A material that fills the surface of a line with a glowing color.
@@ -170,8 +170,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineGlowMaterial
 =#
 @with_kw struct PolylineGlowMaterial
     color::Union{Nothing,Color} = nothing
-    glowPower::Union{Nothing,Number} = nothing
-    taperPower::Union{Nothing,Number} = nothing
+    glowPower::Union{Nothing,<:Real} = nothing
+    taperPower::Union{Nothing,<:Real} = nothing
 end
 
 #= A material that fills the surface of a line with an arrow.
@@ -187,7 +187,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial
 @with_kw struct PolylineDashMaterial
     color::Union{Nothing,Color} = nothing
     gapColor::Union{Nothing,Color} = nothing
-    dashLength::Union{Nothing,Number} = nothing
+    dashLength::Union{Nothing,<:Real} = nothing
     dashPattern::Union{Nothing,Integer} = nothing
 end
 
@@ -196,10 +196,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
 =#
 @with_kw struct GridMaterial
     color::Union{Nothing,Color} = nothing
-    cellAlpha::Union{Nothing,Number} = nothing
+    cellAlpha::Union{Nothing,<:Real} = nothing
     lineCount::Union{Nothing,SVector{2,Integer}} = nothing
-    lineThickness::Union{Nothing,SVector{2,Number}} = nothing
-    lineOffset::Union{Nothing,SVector{2,Number}} = nothing
+    lineThickness::Union{Nothing,SVector{2,<:Real}} = nothing
+    lineOffset::Union{Nothing,SVector{2,<:Real}} = nothing
 end
 
 #= A material that fills the surface with alternating colors.
@@ -209,8 +209,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/StripeMaterial
     orientation::Union{Nothing,StripeOrientations.T} = nothing
     evenColor::Union{Nothing,Color} = nothing
     oddColor::Union{Nothing,Color} = nothing
-    offset::Union{Nothing,Number} = nothing
-    repeat::Union{Nothing,Number} = nothing
+    offset::Union{Nothing,<:Real} = nothing
+    repeat::Union{Nothing,<:Real} = nothing
 end
 
 #= A material that fills the surface with alternating colors.
@@ -252,10 +252,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
 =#
 @with_kw struct Position
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,SVector{3,Number}} = nothing
-    cartographicRadians::Union{Nothing,SVector{3,Number}} = nothing
-    cartographicDegrees::Union{Nothing,SVector{3,Number}} = nothing
-    cartesianVelocity::Union{Nothing,SVector{6,Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartographicRadians::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartographicDegrees::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartesianVelocity::Union{Nothing,SVector{6,<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -266,7 +266,7 @@ ViewFrom can optionally vary over time.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
 =#
 @with_kw struct ViewFrom
-    cartesian::Union{Nothing,SVector{3,Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -276,7 +276,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
 =#
 @with_kw struct EllipsoidRadii
-    cartesian::Union{Nothing,SVector{3,Number}} = nothing
+    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -288,38 +288,38 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
 @with_kw struct Corridor
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
-    width::Union{Nothing,Number} = nothing
-    height::Union{Nothing,Number} = nothing
+    width::Union{Nothing,<:Real} = nothing
+    height::Union{Nothing,<:Real} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
-    extrudedHeight::Union{Nothing,Number} = nothing
+    extrudedHeight::Union{Nothing,<:Real} = nothing
     extrudedHeightreference::Union{Nothing,HeightReference} = nothing
     cornerType::Union{Nothing,CornerTypes.T} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
     classificationType::Union{Nothing,ClassificationType} = nothing
-    zIndex::Union{Nothing,Number} = nothing
+    zIndex::Union{Nothing,<:Real} = nothing
 end
 
 #= A cylinder, which is a special cone defined by length, top and bottom radius.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Cylinder
 =#
 @with_kw struct Cylinder
-    length::Number
+    length::Real
     show::Union{Nothing,Bool} = nothing
-    topRadius::Number
-    bottomRadius::Number
+    topRadius::Real
+    bottomRadius::Real
     heightreference::Union{Nothing,HeightReference} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     numberOfVerticalLines::Union{Nothing,Integer} = nothing
     slices::Union{Nothing,Integer} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
@@ -330,22 +330,22 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipse
 =#
 @with_kw struct Ellipse
-    semiMajorAxis::Number
-    semiMinorAxis::Number
+    semiMajorAxis::Real
+    semiMinorAxis::Real
     show::Union{Nothing,Bool} = nothing
-    height::Union{Nothing,Number} = nothing
+    height::Union{Nothing,<:Real} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
-    extrudedHeight::Union{Nothing,Number} = nothing
+    extrudedHeight::Union{Nothing,<:Real} = nothing
     extrudedHeightreference::Union{Nothing,HeightReference} = nothing
-    rotation::Union{Nothing,Number} = nothing
-    stRotation::Union{Nothing,Number} = nothing
+    rotation::Union{Nothing,<:Real} = nothing
+    stRotation::Union{Nothing,<:Real} = nothing
     numberOfVerticalLines::Union{Nothing,Integer} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
     classificationType::Union{Nothing,ClassificationType} = nothing
@@ -359,7 +359,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polygon
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
     arcType::Union{Nothing,ArcTypes.T} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     material::Union{Nothing,Material} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
@@ -374,8 +374,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polyline
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
     arcType::Union{Nothing,ArcTypes.T} = nothing
-    width::Union{Nothing,Number} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    width::Union{Nothing,<:Real} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     material::Union{Nothing,Material} = nothing
     followSurface::Union{Nothing,Bool} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
@@ -410,17 +410,17 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid
 @with_kw struct Ellipsoid
     radii::EllipsoidRadii
     innerRadii::Union{Nothing,EllipsoidRadii} = nothing
-    minimumClock::Union{Nothing,Number} = nothing
-    maximumClock::Union{Nothing,Number} = nothing
-    minimumCone::Union{Nothing,Number} = nothing
-    maximumCone::Union{Nothing,Number} = nothing
+    minimumClock::Union{Nothing,<:Real} = nothing
+    maximumClock::Union{Nothing,<:Real} = nothing
+    minimumCone::Union{Nothing,<:Real} = nothing
+    maximumCone::Union{Nothing,<:Real} = nothing
     show::Union{Nothing,Bool} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     stackPartitions::Union{Nothing,Integer} = nothing
     slicePartitions::Union{Nothing,Integer} = nothing
     subdivisions::Union{Nothing,Integer} = nothing
@@ -439,7 +439,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
@@ -450,16 +450,16 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle
 @with_kw struct Rectangle
     coordinates::RectangleCoordinates
     show::Union{Nothing,Bool} = nothing
-    height::Union{Nothing,Number} = nothing
+    height::Union{Nothing,<:Real} = nothing
     heightreference::Union{Nothing,HeightReference} = nothing
-    extrudedHeight::Union{Nothing,Number} = nothing
+    extrudedHeight::Union{Nothing,<:Real} = nothing
     extrudedHeightreference::Union{Nothing,HeightReference} = nothing
-    rotation::Union{Nothing,Number} = nothing
-    stRotation::Union{Nothing,Number} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    rotation::Union{Nothing,<:Real} = nothing
+    stRotation::Union{Nothing,<:Real} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -477,7 +477,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
     #= Eye coordinates are a left-handed coordinate system
     the Y-axis poitns up, and the Z-axis points into the screen.
     where the X-axis points toward the viewer's right, =#
-    cartesian::SVector{3,Number} = nothing
+    cartesian::SVector{3,<:Real} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -489,7 +489,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock
 =#
 @with_kw struct Clock
     currentTime::DateTime
-    multiplier::Union{Nothing,Number} = nothing
+    multiplier::Union{Nothing,<:Real} = nothing
     range::Union{Nothing,ClockRanges.T} = nothing
     step::Union{Nothing,ClockSteps.T} = nothing
 end
@@ -505,10 +505,10 @@ either by defining availability for this object,
 =#
 @with_kw struct Path
     show::Union{Nothing,Bool} = nothing
-    leadTime::Union{Nothing,Number} = nothing
-    trailTime::Union{Nothing,Number} = nothing
-    width::Union{Nothing,Number} = nothing
-    resolution::Union{Nothing,Number} = nothing
+    leadTime::Union{Nothing,<:Real} = nothing
+    trailTime::Union{Nothing,<:Real} = nothing
+    width::Union{Nothing,<:Real} = nothing
+    resolution::Union{Nothing,<:Real} = nothing
     material::Union{Nothing,PolylineMaterial} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
@@ -518,15 +518,15 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Point
 =#
 @with_kw struct Point
     show::Union{Nothing,Bool} = nothing
-    pixelSize::Union{Nothing,Number} = nothing
-    heightReference::Union{Nothing,Number} = nothing
+    pixelSize::Union{Nothing,<:Real} = nothing
+    heightReference::Union{Nothing,<:Real} = nothing
     color::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     scaleByDistance::Union{Nothing,NearFarScalar} = nothing
-    translucencyByDistance::Union{Nothing,Number} = nothing
+    translucencyByDistance::Union{Nothing,<:Real} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
-    disableDepthTestDistance::Union{Nothing,Number} = nothing
+    disableDepthTestDistance::Union{Nothing,<:Real} = nothing
 end
 
 #= A 3D Tiles tileset.
@@ -535,7 +535,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/TileSet
 @with_kw struct TileSet
     uri::Any
     show::Union{Nothing,Bool} = nothing
-    maximumScreenSpaceError::Union{Nothing,Number} = nothing
+    maximumScreenSpaceError::Union{Nothing,<:Real} = nothing
 end
 
 #=A two-dimensional wall defined as a line strip and optional maximum and minimum heights.
@@ -545,14 +545,14 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall
 @with_kw struct Wall
     show::Union{Nothing,Bool} = nothing
     positions::PositionList
-    minimumHeights::Union{Nothing,Number} = nothing
-    maximumHeights::Union{Nothing,Number} = nothing
-    granularity::Union{Nothing,Number} = nothing
+    minimumHeights::Union{Nothing,<:Real} = nothing
+    maximumHeights::Union{Nothing,<:Real} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
     fill::Union{Nothing,Bool} = nothing
     material::Union{Nothing,Material} = nothing
     outline::Union{Nothing,Bool} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
@@ -565,14 +565,14 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     text::String = nothing
     font::Union{Nothing,String} = nothing
     style::Union{Nothing,LabelStyles.T} = nothing
-    scale::Union{Nothing,Number} = nothing
+    scale::Union{Nothing,<:Real} = nothing
     showBackground::Union{Nothing,Bool} = nothing
     backgroundColor::Union{Nothing,Color} = nothing
     fillColor::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
-    outlineWidth::Union{Nothing,Number} = nothing
-    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
-    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
+    pixelOffset::Union{Nothing,SVector{2,<:Real}} = nothing
+    eyeOffset::Union{Nothing,SVector{3,<:Real}} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
@@ -585,9 +585,9 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
 @with_kw struct Billboard
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
-    scale::Union{Nothing,Number} = nothing
-    eyeOffset::Union{Nothing,SVector{3,Number}} = nothing
-    pixelOffset::Union{Nothing,SVector{2,Number}} = nothing
+    scale::Union{Nothing,<:Real} = nothing
+    eyeOffset::Union{Nothing,SVector{3,<:Real}} = nothing
+    pixelOffset::Union{Nothing,SVector{2,<:Real}} = nothing
     color::Union{Nothing,Color} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
@@ -595,9 +595,9 @@ end
 
 # https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
 @with_kw struct NodeTransformation
-    translation::Union{Nothing,SVector{3,Number}} = nothing
-    rotation::Union{Nothing,SVector{4,Number}} = nothing
-    scale::Union{Nothing,SVector{3,Number}} = nothing
+    translation::Union{Nothing,SVector{3,<:Real}} = nothing
+    rotation::Union{Nothing,SVector{4,<:Real}} = nothing
+    scale::Union{Nothing,SVector{3,<:Real}} = nothing
 end
 
 #= A 3D model.
@@ -606,18 +606,18 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
 @with_kw struct Model
     gltf::Uri
     show::Union{Nothing,Bool} = nothing
-    scale::Union{Nothing,Number} = nothing
-    minimumPixelSize::Union{Nothing,Number} = nothing
-    maximumScale::Union{Nothing,Number} = nothing
+    scale::Union{Nothing,<:Real} = nothing
+    minimumPixelSize::Union{Nothing,<:Real} = nothing
+    maximumScale::Union{Nothing,<:Real} = nothing
     incrementallyLoadTextures::Union{Nothing,Bool} = nothing
     runAnimations::Union{Nothing,Bool} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     heightReference::Union{Nothing,HeightReferences.T} = nothing
     silhouetteColor::Union{Nothing,Color} = nothing
-    silhouetteSize::Union{Nothing,Number} = nothing
+    silhouetteSize::Union{Nothing,<:Real} = nothing
     color::Union{Nothing,Color} = nothing
     colorBlendMode::Union{Nothing,ColorBlendModes.T} = nothing
-    colorBlendAmount::Union{Nothing,Number} = nothing
+    colorBlendAmount::Union{Nothing,<:Real} = nothing
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
     nodeTransformations::Union{Nothing,NodeTransformation} = nothing
     articulations = nothing  # TODO
@@ -668,7 +668,7 @@ struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
 
-function check_rgba(rgba::SVector{4,Number})::Nothing
+function check_rgba(rgba::Vector{<:Real})::Nothing
     if !(length(rgba) == 4 || mod(length(rgba), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
@@ -693,7 +693,7 @@ function check_rgba(rgba::SVector{4,Number})::Nothing
     end
 end
 
-function check_rgbaf(rgbaf::SVector{4,Number})::Nothing
+function check_rgbaf(rgbaf::Vector{<:Real})::Nothing
     if !(length(rgbaf) == 4 || mod(length(rgbaf), 5) == 0)
         error(
             "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",

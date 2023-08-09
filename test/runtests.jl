@@ -18,6 +18,55 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
 - reduce size of fractional-part of floating point numbers
 =#
 @testset "CZML.jl" begin
+    @testset "check_rgba" begin
+        c1 = [255, 0, 0]
+        m1 = Material(;
+            solidColor = SolidColorMaterial(;
+                color = Color(; rgba = c1),
+            ))
+        @test_throws ErrorException encodeProperties(m1)
+        @test_throws ErrorException check_rgba(c1)
+
+        c2 = [255, 0, 0, -1]
+        m2 = Material(;
+            solidColor = SolidColorMaterial(;
+                color = Color(; rgba = c2),
+            ))
+        @test_throws ErrorException encodeProperties(m2)
+        @test_throws ErrorException check_rgba(c2)
+    end
+
+    @testset "check_rgbaf" begin
+        c1 = [255, 0, 0]
+        m1 = Material(;
+            solidColor = SolidColorMaterial(;
+                color = Color(; rgbaf = c1),
+            ))
+        @test_throws ErrorException encodeProperties(m1)
+        @test_throws ErrorException check_rgbaf(c1)
+
+        c2 = [255, 0, 0, -1]
+        m2 = Material(;
+            solidColor = SolidColorMaterial(;
+                color = Color(; rgbaf = c2),
+            ))
+        @test_throws ErrorException encodeProperties(m2)
+        @test_throws ErrorException check_rgbaf(c2)
+    end
+
+    @testset "check_TimeInterval" begin
+        t = TimeInterval(; endTime = Dates.now(), startTime = Dates.now() + Second(1))
+        @test_throws ErrorException check_TimeInterval(t)
+    end
+
+    @testset "check_VectorOfTimeInterval" begin
+        t = [
+            TimeInterval(; endTime = Dates.now(), startTime = Dates.now() + Second(1)),
+            TimeInterval(; startTime = Dates.now(), endTime = Dates.now() + Second(1)),
+        ]
+        @test_throws ErrorException check_VectorOfTimeInterval(t)
+    end
+
     @testset "encodeDateTime" begin
         @test "2012-08-04T16:00:00Z" == encodeDateTime(DateTime(2012, 8, 4, 16, 0, 0))
     end
