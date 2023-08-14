@@ -1,4 +1,3 @@
-using StaticArrays
 using UUIDs
 using Dates
 using Parameters
@@ -31,7 +30,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
 =#
 @with_kw struct Orientation
-    unitQuaternion::SVector{4,<:Real}
+    unitQuaternion::Vector{<:Real}
     reference::Union{Nothing,String} = nothing
     velocityreference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
@@ -46,7 +45,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
 =#
 @with_kw struct NearFarScalar
-    nearFarScalar::SVector{4,<:Real}
+    nearFarScalar::Vector{<:Real}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -65,8 +64,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates
 =#
 @with_kw struct RectangleCoordinates
     reference::Union{Nothing,String} = nothing
-    wsen::Union{Nothing,SVector{4,<:Real}} = nothing
-    wsenDegrees::Union{Nothing,SVector{4,<:Real}} = nothing
+    wsen::Union{Nothing,Vector{<:Real}} = nothing
+    wsenDegrees::Union{Nothing,Vector{<:Real}} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -75,7 +74,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions
 =#
 @with_kw struct BoxDimensions
-    cartesian::SVector{3,<:Real}
+    cartesian::Vector{<:Real}
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
 end
@@ -102,7 +101,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition
 =#
 @with_kw struct DistanceDisplayCondition
-    distanceDisplayCondition::SVector{2,<:Real} = nothing
+    distanceDisplayCondition::Vector{<:Real} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -113,7 +112,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
 =#
 @with_kw struct PositionList
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartesian::Union{Nothing,Vector{<:Real}} = nothing
     cartographicRadians::Union{Nothing,Vector{<:Real}} = nothing
     cartographicDegrees::Union{Nothing,Vector{<:Real}} = nothing
     references::Union{Nothing,Vector{String}} = nothing
@@ -144,7 +143,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial
 =#
 @with_kw struct ImageMaterial
     image::Uri
-    repeat::Union{Nothing,SVector{2,Integer}} = nothing
+    repeat::Union{Nothing,Vector{Integer}} = nothing
     color::Union{Nothing,Color} = nothing
     transparent::Union{Nothing,Bool} = nothing
 end
@@ -197,9 +196,9 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
 @with_kw struct GridMaterial
     color::Union{Nothing,Color} = nothing
     cellAlpha::Union{Nothing,<:Real} = nothing
-    lineCount::Union{Nothing,SVector{2,Integer}} = nothing
-    lineThickness::Union{Nothing,SVector{2,<:Real}} = nothing
-    lineOffset::Union{Nothing,SVector{2,<:Real}} = nothing
+    lineCount::Union{Nothing,Vector{Integer}} = nothing
+    lineThickness::Union{Nothing,Vector{<:Real}} = nothing
+    lineOffset::Union{Nothing,Vector{<:Real}} = nothing
 end
 
 #= A material that fills the surface with alternating colors.
@@ -219,7 +218,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial
 @with_kw struct CheckerboardMaterial
     evenColor::Union{Nothing,Color} = nothing
     oddColor::Union{Nothing,Color} = nothing
-    repeat::Union{Nothing,SVector{2,Integer}} = nothing
+    repeat::Union{Nothing,Vector{Integer}} = nothing
 end
 
 #= A definition of how a surface is colored or shaded.
@@ -252,10 +251,10 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
 =#
 @with_kw struct Position
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing
-    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
-    cartographicRadians::Union{Nothing,SVector{3,<:Real}} = nothing
-    cartographicDegrees::Union{Nothing,SVector{3,<:Real}} = nothing
-    cartesianVelocity::Union{Nothing,SVector{6,<:Real}} = nothing
+    cartesian::Union{Nothing,Vector{<:Real}} = nothing
+    cartographicRadians::Union{Nothing,Vector{<:Real}} = nothing
+    cartographicDegrees::Union{Nothing,Vector{<:Real}} = nothing
+    cartesianVelocity::Union{Nothing,Vector{<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -266,7 +265,7 @@ ViewFrom can optionally vary over time.
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
 =#
 @with_kw struct ViewFrom
-    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartesian::Union{Nothing,Vector{<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -276,7 +275,7 @@ end
 https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
 =#
 @with_kw struct EllipsoidRadii
-    cartesian::Union{Nothing,SVector{3,<:Real}} = nothing
+    cartesian::Union{Nothing,Vector{<:Real}} = nothing
     reference::Union{Nothing,String} = nothing
     interpolatable::Union{Nothing,Interpolatable} = nothing
     deletable::Union{Nothing,Deletable} = nothing
@@ -477,7 +476,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
     #= Eye coordinates are a left-handed coordinate system
     the Y-axis poitns up, and the Z-axis points into the screen.
     where the X-axis points toward the viewer's right, =#
-    cartesian::SVector{3,<:Real} = nothing
+    cartesian::Vector{<:Real} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
@@ -571,8 +570,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     fillColor::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
     outlineWidth::Union{Nothing,<:Real} = nothing
-    pixelOffset::Union{Nothing,SVector{2,<:Real}} = nothing
-    eyeOffset::Union{Nothing,SVector{3,<:Real}} = nothing
+    pixelOffset::Union{Nothing,Vector{<:Real}} = nothing
+    eyeOffset::Union{Nothing,Vector{<:Real}} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
@@ -586,8 +585,8 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,<:Real} = nothing
-    eyeOffset::Union{Nothing,SVector{3,<:Real}} = nothing
-    pixelOffset::Union{Nothing,SVector{2,<:Real}} = nothing
+    eyeOffset::Union{Nothing,Vector{<:Real}} = nothing
+    pixelOffset::Union{Nothing,Vector{<:Real}} = nothing
     color::Union{Nothing,Color} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
@@ -595,9 +594,9 @@ end
 
 # https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
 @with_kw struct NodeTransformation
-    translation::Union{Nothing,SVector{3,<:Real}} = nothing
-    rotation::Union{Nothing,SVector{4,<:Real}} = nothing
-    scale::Union{Nothing,SVector{3,<:Real}} = nothing
+    translation::Union{Nothing,Vector{<:Real}} = nothing
+    rotation::Union{Nothing,Vector{<:Real}} = nothing
+    scale::Union{Nothing,Vector{<:Real}} = nothing
 end
 
 #= A 3D model.
@@ -666,6 +665,94 @@ end
 #=A document containing a preamble and one or more packets=#
 struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
+end
+
+function check_unitQuaternion(coords::Vector{<:Real})
+    if !(length(coords) == 4 || mod(length(coords), 5) == 0)
+        error(
+            "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
+
+function check_distanceDisplayCondition(coords::Vector{<:Real})
+    if length(coords) != 2
+        error(
+            "Input values must have 2 values",
+        )
+    end
+end
+
+function check_lineCount(coords::Vector{<:Integer})
+    if length(coords) != 2
+        error(
+            "Input values must have 2 values",
+        )
+    end
+end
+
+function check_lineThickness(coords::Vector{<:Real})
+    if length(coords) != 2
+        error(
+            "Input values must have 2 values",
+        )
+    end
+end
+
+function check_lineOffset(coords::Vector{<:Real})
+    if length(coords) != 2
+        error(
+            "Input values must have 2 values",
+        )
+    end
+end
+
+function check_repeat(coords::Vector{<:Integer})
+    if length(coords) != 2
+        error(
+            "Input values must have 2 values",
+        )
+    end
+end
+
+function check_wsen(coords::Vector{<:Real})
+    if !(length(coords) == 4 || mod(length(coords), 5) == 0)
+        error(
+            "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
+
+function check_wsenDegrees(coords::Vector{<:Real})
+    if !(length(coords) == 4 || mod(length(coords), 5) == 0)
+        error(
+            "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
+
+function check_cartographicDegrees(coords::Vector{<:Real})
+    if !(length(coords) == 3 || mod(length(coords), 4) == 0)
+        error(
+            "Input values must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
+
+function check_cartographicRadians(coords::Vector{<:Real})
+    if !(length(coords) == 3 || mod(length(coords), 4) == 0)
+        error(
+            "Input values must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
+
+function check_cartesian(coords::Vector{<:Real})
+    if !(length(coords) == 3 || mod(length(coords), 4) == 0)
+        error(
+            "Input values must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+        )
+    end
 end
 
 function check_rgba(rgba::Vector{<:Real})::Nothing
