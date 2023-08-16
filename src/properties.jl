@@ -852,3 +852,11 @@ end
 function check_VectorOfTimeInterval(timeIntervals::Vector{TimeInterval})::Nothing
     map(check_TimeInterval, timeIntervals)
 end
+
+function check_cartesianVelocity(coords::Vector{<:Real})
+    if !(length(coords) == 6 || mod(length(coords), 7) == 0)
+        error(
+            "Input values must have either 6 or N * 7 values, where N is the number of time-tagged samples.",
+        )
+    end
+end
