@@ -206,21 +206,30 @@ function PositionList(;
         )
     end
     if !isnothing(cartographicDegrees)
-        if !(length(cartographicDegrees) == 3 || mod(length(cartographicDegrees), 4) == 0)
+        if !(
+            length(cartographicDegrees) == 3 || mod(length(cartographicDegrees), 3) == 0 ||
+            mod(length(cartographicDegrees), 4) == 0
+        )
             error(
-                "cartographicDegrees must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+                "cartographicDegrees must have either 3, M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
             )
         end
     elseif !isnothing(cartographicRadians)
-        if !(length(cartographicRadians) == 3 || mod(length(cartographicRadians), 4) == 0)
+        if !(
+            length(cartographicRadians) == 3 || mod(length(cartographicRadians), 3) == 0 ||
+            mod(length(cartographicRadians), 4) == 0
+        )
             error(
-                "cartographicRadians must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+                "cartographicRadians must have either 3, M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
             )
         end
     else
-        !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+        !(
+            length(cartesian) == 3 || mod(length(cartesian), 3) == 0 ||
+            mod(length(cartesian), 4) == 0
+        )
         error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            "cartesian must have either 3, M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
         )
     end
     return PositionList(
