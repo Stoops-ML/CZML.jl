@@ -897,7 +897,7 @@ end
 
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model")
 @with_kw struct Model
-    gltf::Uri
+    gltf::Union{Uri,String}
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,Real} = nothing
     minimumPixelSize::Union{Nothing,Real} = nothing
