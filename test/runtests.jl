@@ -19,52 +19,34 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
 =#
 @testset "CZML.jl" begin
     @testset "check_rgba" begin
-        c1 = [255, 0, 0]
-        m1 = Material(;
+        @test_throws ErrorException Material(;
             solidColor = SolidColorMaterial(;
-                color = Color(; rgba = c1),
+                color = Color(; rgba = [255, 0, 0]),
             ))
-        @test_throws ErrorException encodeProperties(m1)
-        @test_throws ErrorException check_rgba(c1)
 
-        c2 = [255, 0, 0, -1]
-        m2 = Material(;
+        @test_throws ErrorException Material(;
             solidColor = SolidColorMaterial(;
-                color = Color(; rgba = c2),
+                color = Color(; rgba = [255, 0, 0, -1]),
             ))
-        @test_throws ErrorException encodeProperties(m2)
-        @test_throws ErrorException check_rgba(c2)
     end
 
     @testset "check_rgbaf" begin
-        c1 = [255, 0, 0]
-        m1 = Material(;
+        @test_throws ErrorException Material(;
             solidColor = SolidColorMaterial(;
-                color = Color(; rgbaf = c1),
+                color = Color(; rgbaf = [255, 0, 0]),
             ))
-        @test_throws ErrorException encodeProperties(m1)
-        @test_throws ErrorException check_rgbaf(c1)
 
-        c2 = [255, 0, 0, -1]
-        m2 = Material(;
+        @test_throws ErrorException Material(;
             solidColor = SolidColorMaterial(;
-                color = Color(; rgbaf = c2),
+                color = Color(; rgbaf = [255, 0, 0, -1]),
             ))
-        @test_throws ErrorException encodeProperties(m2)
-        @test_throws ErrorException check_rgbaf(c2)
     end
 
     @testset "check_TimeInterval" begin
-        t = TimeInterval(; endTime = Dates.now(), startTime = Dates.now() + Second(1))
-        @test_throws ErrorException check_TimeInterval(t)
-    end
-
-    @testset "check_VectorOfTimeInterval" begin
-        t = [
-            TimeInterval(; endTime = Dates.now(), startTime = Dates.now() + Second(1)),
-            TimeInterval(; startTime = Dates.now(), endTime = Dates.now() + Second(1)),
-        ]
-        @test_throws ErrorException check_VectorOfTimeInterval(t)
+        @test_throws ErrorException TimeInterval(;
+            endTime = Dates.now(),
+            startTime = Dates.now() + Second(1),
+        )
     end
 
     @testset "encodeDateTime" begin
@@ -78,22 +60,6 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 endTime = DateTime(2012, 8, 5, 16, 0, 0),
             ),
         )
-    end
-
-    @testset "encodeVectorOfTimeInterval" begin
-        @test [
-            "2012-08-04T16:00:00Z/2012-08-05T16:00:00Z",
-            "2012-08-06T16:00:00Z/2012-08-07T16:00:00Z",
-        ] == encodeVectorOfTimeInterval([
-            TimeInterval(;
-                startTime = DateTime(2012, 8, 4, 16, 0, 0),
-                endTime = DateTime(2012, 8, 5, 16, 0, 0),
-            ),
-            TimeInterval(;
-                startTime = DateTime(2012, 8, 6, 16, 0, 0),
-                endTime = DateTime(2012, 8, 7, 16, 0, 0),
-            ),
-        ])
     end
 
     @testset "Availability" begin
