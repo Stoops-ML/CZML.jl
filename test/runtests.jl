@@ -274,6 +274,52 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
         @test expected_result == JSON.parsefile(fileName)
     end
 
+    @testset "CZML Model" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Model.html&label=CZML
+        str_CZML = """[
+            {
+              id: "document",
+              name: "CZML Model",
+              version: "1.0",
+            },
+            {
+              id: "aircraft model",
+              name: "Cesium Air",
+              position: {
+                cartographicDegrees: [-77, 37, 10000],
+              },
+              model: {
+                gltf: "../SampleData/models/CesiumAir/Cesium_Air.glb",
+                scale: 2.0,
+                minimumPixelSize: 128,
+              },
+            },
+          ]"""
+        expected_result = CZML_string_to_JSON(str_CZML)
+
+        # recreate using CZML
+        p0 = Preamble(; name = "CZML Model")
+        p1 = Packet(;
+            id = "aircraft model",
+            name = "Cesium Air",
+            position = Position(;
+                cartographicDegrees = [-77, 37, 10000],
+            ),
+            model = Model(;
+                gltf = "../SampleData/models/CesiumAir/Cesium_Air.glb",
+                scale = 2.0,
+                minimumPixelSize = 128,
+            ),
+        )
+        d = Document([p0, p1])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+        @test expected_result == JSON.parsefile(fileName)
+    end
+
     @testset "CZML Corridor" begin
         # https://sandcastle.cesium.com/?src=CZML%20Corridor.html&label=CZML
         str_CZML = """[
