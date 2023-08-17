@@ -2,6 +2,7 @@ module CZML
 
 # properties
 export InterpolationAlgorithms,
+    CornerTypes,
     ExtrapolationTypes,
     ReferenceFrames,
     LabelStyles,
