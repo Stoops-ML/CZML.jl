@@ -5,17 +5,14 @@ using URIs
 include("enums.jl")
 include("types.jl")
 
-#= A property whose value may be deleted.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DeletableProperty
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DeletableProperty")
 @with_kw struct Deletable
     delete::Union{Nothing,Bool} = nothing
 end
 
-#=A property whose value may be determined by interpolating.
-The interpolation happens over provided time-tagged samples.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/InterpolatableProperty
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/InterpolatableProperty",
+)
 @with_kw struct Interpolatable
     epoch::DateTime
     interpolationAlgorithm::Union{Nothing,InterpolationAlgorithms.T} = nothing
@@ -26,9 +23,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/InterpolatableProperty
     backwardExtrapolationDuration::Union{Nothing,Real} = nothing
 end
 
-#= Defines an orientati and transforms it to the Earth fixed axes.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Orientation")
 struct Orientation
     unitQuaternion::Vector{<:Real}
     reference::Union{Nothing,String}
@@ -55,13 +50,7 @@ function Orientation(;
         deletable)
 end
 
-#=A numeric value which will be linearly interpolated between two values based on an object's distance from the camera, in eye coordinates.
-
-    The computed value will interpolate between the near value and the far value while the camera distance falls
-    between the near distance and the far distance, and will be clamped to the near or far value while the distance is
-    less than the near distance or greater than the far distance, respectively.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar")
 @with_kw struct NearFarScalar
     nearFarScalar::Vector{<:Real}
     reference::Union{Nothing,String} = nothing
@@ -69,17 +58,15 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NearFarScalar
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A font, specified using the same syntax as the CSS "font" property.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Font
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Font")
 @with_kw struct Font
     font::String
     reference::Union{Nothing,String} = nothing
 end
 
-#= A set of coordinates describing a cartographic rectangle on the surface of the ellipsoid.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/RectangleCoordinates",
+)
 struct RectangleCoordinates
     reference::Union{Nothing,String}
     wsen::Union{Nothing,Vector{<:Real}}
@@ -124,9 +111,7 @@ function RectangleCoordinates(;
     )
 end
 
-#= The width, depth, and height of a box.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/BoxDimensions")
 struct BoxDimensions
     cartesian::Vector{<:Real}
     reference::Union{Nothing,String}
@@ -151,27 +136,23 @@ function BoxDimensions(;
     return BoxDimensions(cartesian, reference, interpolatable)
 end
 
-#= The height reference of an object, which indicates if the object's position is relative to terrain or not.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/HeightReference
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/HeightReference")
 @with_kw struct HeightReference
     heightreference::HeightReferences.T
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= Whether a classification affects terrain, 3D Tiles, or both.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ClassificationType
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ClassificationType")
 @with_kw struct ClassificationType
     classificationType::ClassificationTypes.T
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= Indicates the visibility of an object based on the distance to the camera.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/DistanceDisplayCondition",
+)
 struct DistanceDisplayCondition
     distanceDisplayCondition::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
@@ -197,9 +178,7 @@ function DistanceDisplayCondition(;
     )
 end
 
-#= A list of positions.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PositionList")
 struct PositionList
     referenceFrame::Union{Nothing,ReferenceFrames.T}
     cartesian::Union{Nothing,Vector{<:Real}}
@@ -254,9 +233,7 @@ function PositionList(;
     )
 end
 
-#= A URI val
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Uri
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Uri")
 struct Uri
     uri::String
     reference::Union{Nothing,String}
@@ -276,9 +253,7 @@ function Uri(;
     )
 end
 
-#= A color. The color can optionally vary over time.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Color")
 struct Color
     rgba::Union{Nothing,Vector{<:Real}}
     rgbaf::Union{Nothing,Vector{<:Real}}
@@ -324,9 +299,7 @@ function Color(;
     )
 end
 
-#= A material that fills the surface with an image.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial")
 struct ImageMaterial
     image::Uri
     repeat::Union{Nothing,Vector{Integer}}
@@ -350,41 +323,39 @@ function ImageMaterial(;
         transparent)
 end
 
-#= A material that fills the surface with a solid color.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/SolidColorMaterial
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/SolidColorMaterial")
 @with_kw struct SolidColorMaterial
     color::Union{Nothing,Color} = nothing
 end
 
-#= A definition of how a surface is colored or shaded.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineOutlineMaterial
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineOutlineMaterial",
+)
 @with_kw struct PolylineOutlineMaterial
     color::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
     outlineWidth::Union{Nothing,Real} = nothing
 end
 
-#= A material that fills the surface of a line with a glowing color.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineGlowMaterial
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineGlowMaterial",
+)
 @with_kw struct PolylineGlowMaterial
     color::Union{Nothing,Color} = nothing
     glowPower::Union{Nothing,Real} = nothing
     taperPower::Union{Nothing,Real} = nothing
 end
 
-#= A material that fills the surface of a line with an arrow.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineArrowMaterial
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineArrowMaterial",
+)
 @with_kw struct PolylineArrowMaterial
     color::Union{Nothing,Color} = nothing
 end
 
-#= A definition of how a polyline should be dashed with two colors.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial",
+)
 @with_kw struct PolylineDashMaterial
     color::Union{Nothing,Color} = nothing
     gapColor::Union{Nothing,Color} = nothing
@@ -392,9 +363,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineDashMaterial
     dashPattern::Union{Nothing,Integer} = nothing
 end
 
-#= A material that fills the surface with a two-dimensional grid.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/GridMaterial")
 struct GridMaterial
     color::Union{Nothing,Color}
     cellAlpha::Union{Nothing,Real}
@@ -432,9 +401,7 @@ function GridMaterial(;
         lineOffset)
 end
 
-#= A material that fills the surface with alternating colors.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/StripeMaterial
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/StripeMaterial")
 struct StripeMaterial
     orientation::Union{Nothing,StripeOrientations.T}
     evenColor::Union{Nothing,Color}
@@ -462,9 +429,9 @@ function StripeMaterial(;
     )
 end
 
-#= A material that fills the surface with alternating colors.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial
-=#
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CheckerboardMaterial",
+)
 struct CheckerboardMaterial
     evenColor::Union{Nothing,Color}
     oddColor::Union{Nothing,Color}
@@ -487,9 +454,7 @@ function CheckerboardMaterial(;
     )
 end
 
-#= A definition of how a surface is colored or shaded.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Material
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Material")
 @with_kw struct Material
     solidColor::Union{Nothing,SolidColorMaterial} = nothing
     image::Union{Nothing,ImageMaterial} = nothing
@@ -499,9 +464,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Material
     polylineOutline = nothing  # not in documentation
 end
 
-#= A definition of how a surface is colored or shaded.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineMaterial
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineMaterial")
 @with_kw struct PolylineMaterial
     solidColor::Union{Nothing,SolidColorMaterial} = nothing
     image::Union{Nothing,ImageMaterial} = nothing
@@ -512,9 +475,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineMaterial
     polylineArrow::Union{Nothing,PolylineArrowMaterial} = nothing
 end
 
-#= Defines a position. The position can optionally vary over time.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position")
 struct Position
     referenceFrame::Union{Nothing,ReferenceFrames.T}
     cartesian::Union{Nothing,Vector{<:Real}}
@@ -586,10 +547,7 @@ function Position(;
     )
 end
 
-#=Suggested initial camera position offset when tracking this object.
-ViewFrom can optionally vary over time.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ViewFrom")
 struct ViewFrom
     cartesian::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
@@ -618,9 +576,7 @@ function ViewFrom(;
     )
 end
 
-#= The radii of an ellipsoid.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EllipsoidRadii")
 struct EllipsoidRadii
     cartesian::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
@@ -646,9 +602,7 @@ function EllipsoidRadii(;
     )
 end
 
-#=A corridor , which is a shape defined by a centerline and width that conforms to the curvature of the body shape. It can can optionally be extruded into a volume.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor")
 @with_kw struct Corridor
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
@@ -670,9 +624,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Corridor
     zIndex::Union{Nothing,Real} = nothing
 end
 
-#= A cylinder, which is a special cone defined by length, top and bottom radius.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Cylinder
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Cylinder")
 @with_kw struct Cylinder
     length::Real
     show::Union{Nothing,Bool} = nothing
@@ -690,9 +642,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Cylinder
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= An ellipse, which is a close curve, on or above Earth's surface.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipse
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipse")
 @with_kw struct Ellipse
     semiMajorAxis::Real
     semiMinorAxis::Real
@@ -716,9 +666,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipse
     zIndex::Union{Nothing,Integer} = nothing
 end
 
-#= A polygon, which is a closed figure on the surface of the Earth.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polygon
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polygon")
 @with_kw struct Polygon
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
@@ -731,9 +679,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polygon
     zIndex::Union{Nothing,Integer} = nothing
 end
 
-#= A polyline, which is a line in the scene composed of multiple segments.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polyline
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polyline")
 @with_kw struct Polyline
     positions::PositionList
     show::Union{Nothing,Bool} = nothing
@@ -750,27 +696,21 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polyline
     zIndex::Union{Nothing,Integer} = nothing
 end
 
-#= The type of an arc.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ArcType
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ArcType")
 @with_kw struct ArcType
     arcType::Union{Nothing,ArcTypes.T} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= Whether or not an object casts or receives shadows from each light source when shadows are enabled.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ShadowMode
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ShadowMode")
 @with_kw struct ShadowMode
     shadowMode::Union{Nothing,ShadowModes.T} = nothing
     reference::Union{Nothing,String} = nothing
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= A closed quadric surface that is a three-dimensional analogue of an ellipse.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid")
 @with_kw struct Ellipsoid
     radii::EllipsoidRadii
     innerRadii::Union{Nothing,EllipsoidRadii} = nothing
@@ -792,9 +732,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Ellipsoid
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= A box, which is a closed rectangular cuboid.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box")
 @with_kw struct Box
     show::Union{Nothing,Bool} = nothing
     dimensions::BoxDimensions
@@ -808,9 +746,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Box
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#=A cartographic rectangle, which conforms to the curvature of the globe and can be placed on the surface or at altitude and can optionally be extruded into a volume.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle")
 @with_kw struct Rectangle
     coordinates::RectangleCoordinates
     show::Union{Nothing,Bool} = nothing
@@ -834,9 +770,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Rectangle
     deletable::Union{Nothing,Deletable} = nothing
 end
 
-#= An offset in eye coordinates which can optionally vary over ti
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/EyeOffset")
 struct EyeOffset
     cartesian::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
@@ -859,11 +793,7 @@ function EyeOffset(;
     )
 end
 
-#=Initial settings for a simulated clock when a document is loaded.
-
-The start and stop time are configured using the interval property.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock")
 @with_kw struct Clock
     currentTime::DateTime
     multiplier::Union{Nothing,Real} = nothing
@@ -871,15 +801,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock
     step::Union{Nothing,ClockSteps.T} = nothing
 end
 
-#= A path, which is a polyline defined by the motion of an object over time.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Path
-
-The possible vertices of the path are specified by the position property.
-Note that because clients cannot render a truly infinite path,
-the path must be limited,
-or by using the leadTime and trailTime properties.
-either by defining availability for this object,
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Path")
 @with_kw struct Path
     show::Union{Nothing,Bool} = nothing
     leadTime::Union{Nothing,Real} = nothing
@@ -890,9 +812,7 @@ either by defining availability for this object,
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= A point, or viewport-aligned circle.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Point
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Point")
 @with_kw struct Point
     show::Union{Nothing,Bool} = nothing
     pixelSize::Union{Nothing,Real} = nothing
@@ -906,19 +826,14 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Point
     disableDepthTestDistance::Union{Nothing,Real} = nothing
 end
 
-#= A 3D Tiles tileset.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/TileSet
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/TileSet")
 @with_kw struct TileSet
     uri::Any
     show::Union{Nothing,Bool} = nothing
     maximumScreenSpaceError::Union{Nothing,Real} = nothing
 end
 
-#=A two-dimensional wall defined as a line strip and optional maximum and minimum heights.
-It conforms to the curvature of the globe and can be placed along the surface or at altitude.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall")
 @with_kw struct Wall
     show::Union{Nothing,Bool} = nothing
     positions::PositionList
@@ -934,9 +849,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Wall
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
 end
 
-#= A string of text.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label")
 @with_kw struct Label
     show::Union{Nothing,Bool} = nothing
     text::String = nothing
@@ -954,11 +867,7 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Label
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
 
-#=A billboard, or viewport-aligned image.
-The billboard is positioned in the scene by the position property.
-A billboard is sometimes called a marker.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard")
 @with_kw struct Billboard
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
@@ -970,16 +879,14 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Billboard
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
 
-# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/NodeTransformation")
 @with_kw struct NodeTransformation
     translation::Union{Nothing,Vector{<:Real}} = nothing
     rotation::Union{Nothing,Vector{<:Real}} = nothing
     scale::Union{Nothing,Vector{<:Real}} = nothing
 end
 
-#= A 3D model.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model")
 @with_kw struct Model
     gltf::Uri
     show::Union{Nothing,Bool} = nothing
@@ -1000,7 +907,11 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model
     articulations = nothing  # TODO
 end
 
-# The preamble packet.
+"""
+# Preamble
+
+The preamble packet.
+"""
 @with_kw struct Preamble
     id::String = "document"
     version::String = "1.0"
@@ -1009,9 +920,7 @@ end
     clock::Union{Nothing,Clock} = nothing
 end
 
-#= A CZML Packet.
-https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
-=#
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet")
 @with_kw struct Packet
     id::String = string(uuid4())
     delete::Union{Nothing,Deletable} = nothing
@@ -1040,7 +949,11 @@ https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet
     wall::Union{Nothing,Wall} = nothing
 end
 
-#=A document containing a preamble and one or more packets=#
+"""
+# Document
+
+A document containing a preamble and one or more packet.
+"""
 struct Document
     packets::Union{Packet,Preamble,Vector{Any}}
 end
