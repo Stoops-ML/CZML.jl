@@ -904,8 +904,8 @@ end
     fillColor::Union{Nothing,Color} = nothing
     outlineColor::Union{Nothing,Color} = nothing
     outlineWidth::Union{Nothing,Real} = nothing
-    pixelOffset::Union{Nothing,Vector{<:Real}} = nothing
-    eyeOffset::Union{Nothing,Vector{<:Real}} = nothing
+    pixelOffset::Union{Nothing,PixelOffset} = nothing
+    eyeOffset::Union{Nothing,EyeOffset} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
 end
@@ -915,8 +915,8 @@ end
     image::String  # TODO String and/or Uri?
     show::Union{Nothing,Bool} = nothing
     scale::Union{Nothing,Real} = nothing
-    eyeOffset::Union{Nothing,Vector{<:Real}} = nothing
-    pixelOffset::Union{Nothing,Vector{<:Real}} = nothing
+    eyeOffset::Union{Nothing,EyeOffset} = nothing
+    pixelOffset::Union{Nothing,PixelOffset} = nothing
     color::Union{Nothing,Color} = nothing
     horizontalOrigin::Union{Nothing,HorizontalOrigins.T} = nothing
     verticalOrigin::Union{Nothing,VerticalOrigins.T} = nothing
