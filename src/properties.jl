@@ -529,27 +529,19 @@ function Position(;
         )
     end
     if !isnothing(cartographicDegrees)
-        if !(length(cartographicDegrees) == 3 || mod(length(cartographicDegrees), 4) == 0)
-            error(
-                "cartographicDegrees must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-            )
+        if length(cartographicDegrees) != 3
+            error("cartographicDegrees must have 3 values.")
         end
     elseif !isnothing(cartographicRadians)
-        if !(length(cartographicRadians) == 3 || mod(length(cartographicRadians), 4) == 0)
-            error(
-                "cartographicRadians must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-            )
+        if length(cartographicRadians) != 3
+            error("cartographicRadians must have 3 values.")
         end
     elseif !isnothing(cartesian)
-        if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
-            error(
-                "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-            )
+        if length(cartesian) != 3
+            error("cartesian must have 3 values.")
         end
-    elseif !(length(cartesianVelocity) == 6 || mod(length(cartesianVelocity), 7) == 0)
-        error(
-            "cartesianVelocity must have either 6 or N * 7 values, where N is the number of time-tagged samples.",
-        )
+    elseif length(cartesianVelocity) != 6
+        error("cartesianVelocity must have 6 values.")
     end
     return Position(
         referenceFrame,

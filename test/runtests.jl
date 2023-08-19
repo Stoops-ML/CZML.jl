@@ -7456,7 +7456,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                     cartesian = [0.0, 0.0, -10.0],
                 ),
             ),
-            position = Position(;
+            position = PositionList(;
                 epoch = DateTime(2012, 8, 4, 10, 0, 0),
                 cartographicDegrees = [
                     0,
