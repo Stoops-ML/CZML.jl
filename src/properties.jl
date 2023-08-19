@@ -470,7 +470,7 @@ end
     grid::Union{Nothing,GridMaterial} = nothing
     stripe::Union{Nothing,StripeMaterial} = nothing
     checkerboard::Union{Nothing,CheckerboardMaterial} = nothing
-    polylineOutline = nothing  # not in documentation
+    polylineOutline::Union{Nothing,PolylineOutlineMaterial} = nothing
 end
 
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineMaterial")
