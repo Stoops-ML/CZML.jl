@@ -139,6 +139,101 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
         @test p.id isa String
     end
 
+    @testset "CZML Point - Time Dynamic" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Point%20-%20Time%20Dynamic.html&label=CZML
+        str_CZML = """[
+            {
+              id: "document",
+              name: "CZML Point - Time Dynamic",
+              version: "1.0",
+            },
+            {
+              id: "point",
+              availability: "2012-08-04T16:00:00Z/2012-08-04T16:05:00Z",
+              position: {
+                epoch: "2012-08-04T16:00:00Z",
+                cartographicDegrees: [
+                  0,
+                  -70,
+                  20,
+                  150000,
+                  100,
+                  -80,
+                  44,
+                  150000,
+                  200,
+                  -90,
+                  18,
+                  150000,
+                  300,
+                  -98,
+                  52,
+                  150000,
+                ],
+              },
+              point: {
+                color: {
+                  rgba: [255, 255, 255, 128],
+                },
+                outlineColor: {
+                  rgba: [255, 0, 0, 128],
+                },
+                outlineWidth: 3,
+                pixelSize: 15,
+              },
+            },
+          ]"""
+        expected_result = CZML_string_to_JSON(str_CZML)
+
+        # recreate using CZML
+        p0 = Preamble(; name = "CZML Point - Time Dynamic")
+        p1 = Packet(;
+            id = "point",
+            availability = TimeInterval(;
+                startTime = DateTime(2012, 8, 4, 16, 0, 0),
+                endTime = DateTime(DateTime(2012, 8, 4, 16, 5, 0)),
+            ),
+            position = PositionList(;
+                epoch = DateTime(2012, 8, 4, 16, 0, 0),
+                cartographicDegrees = [
+                    0,
+                    -70,
+                    20,
+                    150000,
+                    100,
+                    -80,
+                    44,
+                    150000,
+                    200,
+                    -90,
+                    18,
+                    150000,
+                    300,
+                    -98,
+                    52,
+                    150000,
+                ],
+            ),
+            point = Point(;
+                color = Color(;
+                    rgba = [255, 255, 255, 128],
+                ),
+                outlineColor = Color(;
+                    rgba = [255, 0, 0, 128],
+                ),
+                outlineWidth = 3,
+                pixelSize = 15,
+            ),
+        )
+        d = Document([p0, p1])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+        @test expected_result == JSON.parsefile(fileName)
+    end
+
     @testset "CZML Point" begin
         # https://sandcastle.cesium.com/?src=CZML%20Point.html&label=CZML
         str_CZML = """[
