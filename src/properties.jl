@@ -482,6 +482,8 @@ end
     checkerboard::Union{Nothing,CheckerboardMaterial} = nothing
     polylineDash::Union{Nothing,PolylineDashMaterial} = nothing
     polylineArrow::Union{Nothing,PolylineArrowMaterial} = nothing
+    polylineOutline::Union{Nothing,PolylineOutlineMaterial} = nothing
+    polylineGlow::Union{Nothing,PolylineGlowMaterial} = nothing
 end
 
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Position")
