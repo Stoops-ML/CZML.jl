@@ -186,6 +186,7 @@ struct PositionList
     cartographicDegrees::Union{Nothing,Vector{<:Real}}
     references::Union{Nothing,Vector{String}}
     deletable::Union{Nothing,Deletable}
+    epoch::Union{Nothing,DateTime}
 end
 function PositionList(;
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing,
@@ -194,6 +195,7 @@ function PositionList(;
     cartographicDegrees::Union{Nothing,Vector{<:Real}} = nothing,
     references::Union{Nothing,Vector{String}} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
+    epoch::Union{Nothing,DateTime} = nothing,
 )::PositionList
     if 1 != sum(
         map(
@@ -239,6 +241,7 @@ function PositionList(;
         cartographicDegrees,
         references,
         deletable,
+        epoch,
     )
 end
 
