@@ -809,6 +809,31 @@ function EyeOffset(;
         interpolatable,
     )
 end
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PixelOffset")
+struct PixelOffset
+    cartesian::Union{Nothing,Vector{<:Real}}
+    reference::Union{Nothing,String}
+    deletable::Union{Nothing,Deletable}
+    interpolatable::Union{Nothing,Interpolatable}
+end
+function PixelOffset(;
+    cartesian::Union{Nothing,Vector{<:Real}} = nothing,
+    reference::Union{Nothing,String} = nothing,
+    deletable::Union{Nothing,Deletable} = nothing,
+    interpolatable::Union{Nothing,Interpolatable} = nothing,
+)::PixelOffset
+    if !(length(cartesian) == 2 || mod(length(cartesian), 3) == 0)
+        error(
+            "cartesian must have either 2 or N * 3 values, where N is the number of time-tagged samples.",
+        )
+    end
+    return PixelOffset(
+        cartesian,
+        reference,
+        deletable,
+        interpolatable,
+    )
+end
 
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Clock")
 @with_kw struct Clock
