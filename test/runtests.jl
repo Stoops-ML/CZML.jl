@@ -139,6 +139,64 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
         @test p.id isa String
     end
 
+    @testset "CZML Point" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Point.html&label=CZML
+        str_CZML = """[
+            {
+              id: "document",
+              name: "CZML Point",
+              version: "1.0",
+            },
+            {
+              id: "point 1",
+              name: "point",
+              position: {
+                cartographicDegrees: [-111.0, 40.0, 0],
+              },
+              point: {
+                color: {
+                  rgba: [255, 255, 255, 255],
+                },
+                outlineColor: {
+                  rgba: [255, 0, 0, 255],
+                },
+                outlineWidth: 4,
+                pixelSize: 20,
+              },
+            },
+          ]"""
+        expected_result = CZML_string_to_JSON(str_CZML)
+
+        # recreate using CZML
+        p0 = Preamble(;
+            name = "CZML Point",
+        )
+        p1 = Packet(;
+            id = "point 1",
+            name = "point",
+            position = Position(;
+                cartographicDegrees = [-111.0, 40.0, 0],
+            ),
+            point = Point(;
+                color = Color(;
+                    rgba = [255, 255, 255, 255],
+                ),
+                outlineColor = Color(;
+                    rgba = [255, 0, 0, 255],
+                ),
+                outlineWidth = 4,
+                pixelSize = 20,
+            ),
+        )
+        d = Document([p0, p1])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+        @test expected_result == JSON.parsefile(fileName)
+    end
+
     @testset "CZML Path" begin
         # https://sandcastle.cesium.com/?src=CZML%20Path.html&label=CZML
         str_CZML = """[
