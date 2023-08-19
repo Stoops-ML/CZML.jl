@@ -784,11 +784,13 @@ struct EyeOffset
     cartesian::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
     deletable::Union{Nothing,Deletable}
+    interpolatable::Union{Nothing,Interpolatable}
 end
 function EyeOffset(;
     cartesian::Union{Nothing,Vector{<:Real}} = nothing,
     reference::Union{Nothing,String} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
+    interpolatable::Union{Nothing,Interpolatable} = nothing,
 )::EyeOffset
     if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
         error(
@@ -799,6 +801,7 @@ function EyeOffset(;
         cartesian,
         reference,
         deletable,
+        interpolatable,
     )
 end
 
