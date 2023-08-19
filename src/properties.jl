@@ -496,6 +496,7 @@ struct Position
     reference::Union{Nothing,String}
     interpolatable::Union{Nothing,Interpolatable}
     deletable::Union{Nothing,Deletable}
+    epoch::Union{Nothing,DateTime}
 end
 function Position(;
     referenceFrame::Union{Nothing,ReferenceFrames.T} = nothing,
@@ -506,6 +507,7 @@ function Position(;
     reference::Union{Nothing,String} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
+    epoch::Union{Nothing,DateTime} = nothing,
 )::Position
     if 1 != sum(
         map(
@@ -555,6 +557,7 @@ function Position(;
         reference,
         interpolatable,
         deletable,
+        epoch,
     )
 end
 
