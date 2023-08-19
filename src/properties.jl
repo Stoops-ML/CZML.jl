@@ -809,6 +809,7 @@ end
 @with_kw struct Clock
     currentTime::DateTime
     multiplier::Union{Nothing,Real} = nothing
+    interval::Union{Nothing,TimeInterval} = nothing
     range::Union{Nothing,ClockRanges.T} = nothing
     step::Union{Nothing,ClockSteps.T} = nothing
 end
