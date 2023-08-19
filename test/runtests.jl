@@ -234,6 +234,128 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
         @test expected_result == JSON.parsefile(fileName)
     end
 
+    @testset "CZML Wall" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Wall.html&label=CZML
+        str_CZML = """[
+            {
+              id: "document",
+              name: "CZML Wall",
+              version: "1.0",
+            },
+            {
+              id: "wall",
+              wall: {
+                positions: {
+                  cartographicDegrees: [
+                    -115.0,
+                    50.0,
+                    1500000,
+                    -112.5,
+                    50.0,
+                    500000,
+                    -110.0,
+                    50.0,
+                    1500000,
+                    -107.5,
+                    50.0,
+                    500000,
+                    -105.0,
+                    50.0,
+                    1500000,
+                    -102.5,
+                    50.0,
+                    500000,
+                    -100.0,
+                    50.0,
+                    1500000,
+                    -97.5,
+                    50.0,
+                    500000,
+                    -95.0,
+                    50.0,
+                    1500000,
+                    -92.5,
+                    50.0,
+                    500000,
+                    -90.0,
+                    50.0,
+                    1500000,
+                  ],
+                },
+                material: {
+                  solidColor: {
+                    color: {
+                      rgba: [255, 0, 0, 150],
+                    },
+                  },
+                },
+              },
+            },
+          ]"""
+        expected_result = CZML_string_to_JSON(str_CZML)
+
+        # recreate using CZML
+        p0 = Preamble(;
+            name = "CZML Wall",
+        )
+        p1 = Packet(;
+            id = "wall",
+            wall = Wall(;
+                positions = PositionList(;
+                    cartographicDegrees = [
+                        -115.0,
+                        50.0,
+                        1500000,
+                        -112.5,
+                        50.0,
+                        500000,
+                        -110.0,
+                        50.0,
+                        1500000,
+                        -107.5,
+                        50.0,
+                        500000,
+                        -105.0,
+                        50.0,
+                        1500000,
+                        -102.5,
+                        50.0,
+                        500000,
+                        -100.0,
+                        50.0,
+                        1500000,
+                        -97.5,
+                        50.0,
+                        500000,
+                        -95.0,
+                        50.0,
+                        1500000,
+                        -92.5,
+                        50.0,
+                        500000,
+                        -90.0,
+                        50.0,
+                        1500000,
+                    ],
+                ),
+                material = Material(;
+                    solidColor = SolidColorMaterial(;
+                        color = Color(;
+                            rgba = [255, 0, 0, 150],
+                        ),
+                    ),
+                ),
+            ),
+        )
+        d = Document([p0, p1])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+        @test expected_result == JSON.parsefile(fileName)
+    end
+
     @testset "CZML Point" begin
         # https://sandcastle.cesium.com/?src=CZML%20Point.html&label=CZML
         str_CZML = """[
