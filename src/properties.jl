@@ -314,20 +314,22 @@ end
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/ImageMaterial")
 struct ImageMaterial
     image::Uri
-    repeat::Union{Nothing,Vector{Integer}}
+    repeat::Union{Nothing,Vector{<:Real},<:Real}
     color::Union{Nothing,Color}
     transparent::Union{Nothing,Bool}
 end
 function ImageMaterial(;
     image::Uri,
-    repeat::Union{Nothing,Vector{Integer}} = nothing,
+    repeat::Union{Nothing,Vector{<:Real},<:Real} = nothing,
     color::Union{Nothing,Color} = nothing,
     transparent::Union{Nothing,Bool} = nothing,
 )::ImageMaterial
-    if length(repeat) != 2
-        error(
-            "repeat must have 2 values",
-        )
+    if !isnothing(repeat)
+        if length(repeat) != 1 | length(repeat) != 2
+            error(
+                "repeat must have either 1 or 2 values.",
+            )
+        end
     end
     return ImageMaterial(image,
         repeat,
@@ -419,18 +421,20 @@ struct StripeMaterial
     evenColor::Union{Nothing,Color}
     oddColor::Union{Nothing,Color}
     offset::Union{Nothing,Real}
-    repeat::Union{Nothing,Real}
+    repeat::Union{Nothing,Vector{<:Real},<:Real}
 end
 function StripeMaterial(;
     orientation::Union{Nothing,StripeOrientations.T} = nothing,
     evenColor::Union{Nothing,Color} = nothing,
     oddColor::Union{Nothing,Color} = nothing,
     offset::Union{Nothing,Real} = nothing,
-    repeat::Union{Nothing,Real} = nothing)::StripeMaterial
-    if length(repeat) != 2
-        error(
-            "repeat must have 2 values",
-        )
+    repeat::Union{Nothing,Vector{<:Real},<:Real} = nothing)::StripeMaterial
+    if !isnothing(repeat)
+        if length(repeat) != 1 | length(repeat) != 2
+            error(
+                "repeat must have either 1 or 2 values.",
+            )
+        end
     end
     return StripeMaterial(
         orientation,
@@ -447,17 +451,19 @@ end
 struct CheckerboardMaterial
     evenColor::Union{Nothing,Color}
     oddColor::Union{Nothing,Color}
-    repeat::Union{Nothing,Vector{Integer}}
+    repeat::Union{Nothing,Vector{<:Real},<:Real}
 end
 function CheckerboardMaterial(;
-    evenColor,
-    oddColor,
-    repeat,
+    evenColor::Union{Nothing,Color} = nothing,
+    oddColor::Union{Nothing,Color} = nothing,
+    repeat::Union{Nothing,Vector{<:Real},<:Real} = nothing,
 )::CheckerboardMaterial
-    if length(repeat) != 2
-        error(
-            "repeat must have 2 values",
-        )
+    if !isnothing(repeat)
+        if length(repeat) != 1 | length(repeat) != 2
+            error(
+                "repeat must have either 1 or 2 values.",
+            )
+        end
     end
     return CheckerboardMaterial(
         evenColor,
