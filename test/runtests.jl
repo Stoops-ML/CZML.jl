@@ -537,7 +537,6 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
         d = Document([p0, p1, p2, p3, p4])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
-        a = 1
 
         # tests
         @test isfile(fileName)
