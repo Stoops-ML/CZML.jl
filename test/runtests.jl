@@ -20,6 +20,7 @@ end
 #=
 Some of the expected results may have been minimally modifed from Cesium Sandcastle in the following ways:
 - reduce size of fractional-part of floating point numbers
+- JavaScript calculations replaced with numbers
 =#
 @testset "CZML.jl" begin
     @testset "check_rgba" begin
@@ -1338,6 +1339,140 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
             ),
         )
         d = Document([p0, p1, p2, p3, p4])
+        fileName = tempname() * ".czml"
+        printCZML(d, fileName)
+
+        # tests
+        @test isfile(fileName)
+        @test expected_result == JSON.parsefile(fileName)
+    end
+
+    @testset "CZML Position Definitions" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Position%20Definitions.html&label=CZML
+        str_CZML = """[
+            {
+              id: "document",
+              name: "CZML Position Definitions",
+              version: "1.0",
+            },
+            {
+              id: "point1",
+              name: "point in cartographic degrees",
+              position: {
+                cartographicDegrees: [-111.0, 40.0, 150000.0],
+              },
+              point: {
+                color: {
+                  rgba: [100, 0, 200, 255],
+                },
+                outlineColor: {
+                  rgba: [200, 0, 200, 255],
+                },
+                pixelSize: {
+                  number: 10,
+                },
+              },
+            },
+            {
+              id: "point2",
+              name: "point in cartesian coordinates",
+              position: {
+                cartesian: [
+                  1216469.9357990976,
+                  -4736121.71856379,
+                  4081386.8856866374,
+                ],
+              },
+              point: {
+                color: {
+                  rgba: [0, 100, 200, 255],
+                },
+                outlineColor: {
+                  rgba: [200, 0, 200, 255],
+                },
+                pixelSize: {
+                  number: 10,
+                },
+              },
+            },
+            {
+              id: "point 3",
+              name: "point in cartographic radians",
+              position: {
+                cartographicRadians: [Math.PI, Math.PI, 150000],
+              },
+              point: {
+                color: {
+                  rgba: [10, 200, 10, 255],
+                },
+                outlineColor: {
+                  rgba: [200, 0, 200, 255],
+                },
+                pixelSize: {
+                  number: 10,
+                },
+              },
+            },
+          ]"""
+        expected_result = CZML_string_to_JSON(str_CZML)
+
+        # recreate using CZML
+        p0 = Preamble(;
+            name = "CZML Position Definitions",
+        )
+        p1 = Packet(;
+            id = "point1",
+            name = "point in cartographic degrees",
+            position = Position(;
+                cartographicDegrees = [-111.0, 40.0, 150000.0],
+            ),
+            point = Point(;
+                color = Color(;
+                    rgba = [100, 0, 200, 255],
+                ),
+                outlineColor = Color(;
+                    rgba = [200, 0, 200, 255],
+                ),
+                pixelSize = 10,
+            ),
+        )
+        p2 = Packet(;
+            id = "point2",
+            name = "point in cartesian coordinates",
+            position = Position(;
+                cartesian = [
+                    1216469.9357990976,
+                    -4736121.71856379,
+                    4081386.8856866374,
+                ],
+            ),
+            point = Point(;
+                color = Color(;
+                    rgba = [0, 100, 200, 255],
+                ),
+                outlineColor = Color(;
+                    rgba = [200, 0, 200, 255],
+                ),
+                pixelSize = 10,
+            ),
+        )
+        p3 = Packet(;
+            id = "point 3",
+            name = "point in cartographic radians",
+            position = Position(;
+                cartographicRadians = [FIXED_PI, FIXED_PI, 150000],
+            ),
+            point = Point(;
+                color = Color(;
+                    rgba = [10, 200, 10, 255],
+                ),
+                outlineColor = Color(;
+                    rgba = [200, 0, 200, 255],
+                ),
+                pixelSize = 10,
+            ),
+        )
+        d = Document([p0, p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
