@@ -38,10 +38,22 @@ function Orientation(;
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
 )::Orientation
-    if !(length(unitQuaternion) == 4 || mod(length(unitQuaternion), 5) == 0)
+    if 1 != sum(
+        map(
+            !isnothing,
+            [unitQuaternion, reference, velocityreference],
+        ),
+    )
         error(
-            "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+            "One and only one of unitQuaternion, reference or velocityreference must be given.",
         )
+    end
+    if ~isnothing(unitQuaternion)
+        if !(length(unitQuaternion) == 4 || mod(length(unitQuaternion), 5) == 0)
+            error(
+                "Input values must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return Orientation(unitQuaternion,
         reference,
@@ -84,11 +96,11 @@ function RectangleCoordinates(;
     if 1 != sum(
         map(
             !isnothing,
-            [wsen, wsenDegrees],
+            [wsen, wsenDegrees, reference],
         ),
     )
         error(
-            "One and only one of wsen or wsenDegrees must be given",
+            "One and only one of wsen, wsenDegrees or reference must be given.",
         )
     end
     if !isnothing(wsen)
@@ -97,10 +109,12 @@ function RectangleCoordinates(;
                 "wsen must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
             )
         end
-    elseif !(length(wsenDegrees) == 4 || mod(length(wsenDegrees), 5) == 0)
-        error(
-            "wsenDegrees must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
-        )
+    elseif !isnothing(wsenDegrees)
+        if !(length(wsenDegrees) == 4 || mod(length(wsenDegrees), 5) == 0)
+            error(
+                "wsenDegrees must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return RectangleCoordinates(
         reference,
@@ -122,16 +136,22 @@ function BoxDimensions(;
     reference::Union{Nothing,String} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
 )::BoxDimensions
-    if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+    if 1 != sum(
+        map(
+            !isnothing,
+            [cartesian, reference],
+        ),
+    )
         error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            "One and only one of cartesian or reference must be given.",
         )
     end
-
-    if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
-        error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-        )
+    if !isnothing(cartesian)
+        if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+            error(
+                "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return BoxDimensions(cartesian, reference, interpolatable)
 end
@@ -165,10 +185,25 @@ function DistanceDisplayCondition(;
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
 )::DistanceDisplayCondition
-    if length(distanceDisplayCondition) != 2
+    if 1 != sum(
+        map(
+            !isnothing,
+            [distanceDisplayCondition, reference],
+        ),
+    )
         error(
-            "distanceDisplayCondition must have 2 values",
+            "One and only one of distanceDisplayCondition or reference must be given.",
         )
+    end
+    if !isnothing(distanceDisplayCondition)
+        if !(
+            length(distanceDisplayCondition) == 2 ||
+            mod(length(distanceDisplayCondition), 3) == 0
+        )
+            error(
+                "distanceDisplayCondition must have 2 values",
+            )
+        end
     end
     return DistanceDisplayCondition(
         distanceDisplayCondition,
@@ -204,7 +239,7 @@ function PositionList(;
         ),
     )
         error(
-            "One and only one of cartesian, cartographicDegrees, cartographicRadians or references must be given",
+            "One and only one of cartesian, cartographicDegrees, cartographicRadians or references must be given.",
         )
     end
     if !isnothing(cartographicDegrees)
@@ -225,14 +260,15 @@ function PositionList(;
                 "cartographicRadians must have either M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
             )
         end
-    else
-        !(
-            length(cartesian) == 3 || mod(length(cartesian), 3) == 0 ||
+    elseif !isnothing(cartesian)
+        if !(
+            mod(length(cartesian), 3) == 0 ||
             mod(length(cartesian), 4) == 0
         )
-        error(
-            "cartesian must have either 3, M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
-        )
+            error(
+                "cartesian must have either 3, M * 3 or N * 4 values, where M is the number of positions and N is the number of time-tagged samples.",
+            )
+        end
     end
     return PositionList(
         referenceFrame,
@@ -252,12 +288,24 @@ struct Uri
     deletable::Union{Nothing,Deletable}
 end
 function Uri(;
-    uri::String = nothing,
+    uri::Union{Nothing,String} = nothing,
     reference::Union{Nothing,String} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
 )::Uri
-    if !isvalid(uri)
-        error("uri must be a URL or a data URI")
+    if 1 != sum(
+        map(
+            !isnothing,
+            [uri, reference],
+        ),
+    )
+        error(
+            "One and only one of uri or reference must be given.",
+        )
+    end
+    if !isnothing(uri)
+        if !isvalid(uri)
+            error("uri must be a URL or a data URI")
+        end
     end
     return Uri(uri,
         reference,
@@ -271,43 +319,47 @@ struct Color
     rgbaf::Union{Nothing,Vector{<:Real}}
     interpolatable::Union{Nothing,Interpolatable}
     deletable::Union{Nothing,Deletable}
+    reference::Union{Nothing,String}
 end
 function Color(;
     rgba::Union{Nothing,Vector{<:Real}} = nothing,
     rgbaf::Union{Nothing,Vector{<:Real}} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
+    reference::Union{Nothing,String} = nothing,
 )::Color
-    if 1 != sum(map(!isnothing, [rgba, rgbaf]))
-        error("One and only one of rgba or rgbaf must be given.")
+    if 1 != sum(map(!isnothing, [rgba, rgbaf, reference]))
+        error("One and only one of rgba, rgbaf or reference must be given.")
     end
-
-    color_chosen = !isnothing(rgba) ? rgba : rgbaf
-    if length(color_chosen) == 4
-        for n in color_chosen
-            if !(0 ≤ n ≤ 255)
-                error("rgba / rgbaf values must be between zero and one.")
-            end
-        end
-    elseif mod(length(color_chosen), 5) == 0
-        for i in 1:5:length(color_chosen)-1
-            values = color_chosen[i+1:i+4]
-            for n in values
+    if !isnothing(rgba) | !isnothing(rgbaf)
+        color_chosen = !isnothing(rgba) ? rgba : rgbaf
+        if length(color_chosen) == 4
+            for n in color_chosen
                 if !(0 ≤ n ≤ 255)
                     error("rgba / rgbaf values must be between zero and one.")
                 end
             end
+        elseif mod(length(color_chosen), 5) == 0
+            for i in 1:5:length(color_chosen)-1
+                values = color_chosen[i+1:i+4]
+                for n in values
+                    if !(0 ≤ n ≤ 255)
+                        error("rgba / rgbaf values must be between zero and one.")
+                    end
+                end
+            end
+        else
+            error(
+                "rgba / rgbaf must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
+            )
         end
-    else
-        error(
-            "rgba / rgbaf must have either 4 or N * 5 values, where N is the number of time-tagged samples.",
-        )
     end
     return Color(
         rgba,
         rgbaf,
         interpolatable,
         deletable,
+        reference,
     )
 end
 
@@ -531,7 +583,7 @@ function Position(;
         ),
     )
         error(
-            "One and only one of cartesian, cartographicDegrees, cartographicRadians, cartesianVelocity or reference must be given",
+            "One and only one of cartesian, cartographicDegrees, cartographicRadians, cartesianVelocity or reference must be given.",
         )
     end
     if !isnothing(cartographicDegrees)
@@ -546,8 +598,10 @@ function Position(;
         if length(cartesian) != 3
             error("cartesian must have 3 values.")
         end
-    elseif length(cartesianVelocity) != 6
-        error("cartesianVelocity must have 6 values.")
+    elseif !isnothing(cartesianVelocity)
+        if length(cartesianVelocity) != 6
+            error("cartesianVelocity must have 6 values.")
+        end
     end
     return Position(
         referenceFrame,
@@ -575,13 +629,15 @@ function ViewFrom(;
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
 )::ViewFrom
-    if 1 != sum(map(!isnothing, [viewFrom.cartesian viewFrom.reference]))
+    if 1 != sum(map(!isnothing, [cartesian, reference]))
         error("One and only one of cartesian or reference must be given")
     end
-    if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
-        error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-        )
+    if !isnothing(cartesian)
+        if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+            error(
+                "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return ViewFrom(
         cartesian,
@@ -604,10 +660,15 @@ function EllipsoidRadii(;
     interpolatable::Union{Nothing,Interpolatable} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
 )::EllipsoidRadii
-    if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
-        error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
-        )
+    if 1 != sum(map(!isnothing, [cartesian, reference]))
+        error("One and only one of cartesian or reference must be given")
+    end
+    if !isnothing(cartesian)
+        if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+            error(
+                "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return EllipsoidRadii(
         cartesian,
@@ -798,10 +859,22 @@ function EyeOffset(;
     deletable::Union{Nothing,Deletable} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
 )::EyeOffset
-    if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+    if 1 != sum(
+        map(
+            !isnothing,
+            [cartesian, reference],
+        ),
+    )
         error(
-            "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            "One and only one of cartesian or reference must be given.",
         )
+    end
+    if !isnothing(cartesian)
+        if !(length(cartesian) == 3 || mod(length(cartesian), 4) == 0)
+            error(
+                "cartesian must have either 3 or N * 4 values, where N is the number of time-tagged samples.",
+            )
+        end
     end
     return EyeOffset(
         cartesian,
@@ -823,10 +896,22 @@ function PixelOffset(;
     deletable::Union{Nothing,Deletable} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
 )::PixelOffset
-    if !(length(cartesian) == 2 || mod(length(cartesian), 3) == 0)
+    if 1 != sum(
+        map(
+            !isnothing,
+            [cartesian, reference],
+        ),
+    )
         error(
-            "cartesian must have either 2 or N * 3 values, where N is the number of time-tagged samples.",
+            "One and only one of cartesian or reference must be given.",
         )
+    end
+    if !isnothing(cartesian)
+        if length(cartesian) != 2
+            error(
+                "cartesian must have 2 values.",
+            )
+        end
     end
     return PixelOffset(
         cartesian,
