@@ -210,25 +210,8 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
 end
 
 function encodeDocument(document::Document)::Vector{Dict{String,Any}}
-    if document.packets isa Packet
-        packets = [document.packets]
-    else
-        packets = document.packets
-    end
-
-    preamble_found = false
-    for packet in packets
-        if packet isa Preamble
-            preamble_found = true
-            break
-        end
-    end
-    if !preamble_found
-        error("Preamble not found in document.")
-    end
-
     out = Vector{Dict{String,Any}}()
-    for packet in packets
+    for packet in document.packets
         push!(out, encodeProperties(packet))
     end
     return out

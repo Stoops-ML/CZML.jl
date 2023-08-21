@@ -1119,5 +1119,23 @@ end
 A document containing a preamble and one or more packet.
 """
 struct Document
-    packets::Union{Packet,Preamble,Vector{Any}}
+    packets::Union{Preamble,Packet,Vector{Any}}
+end
+function Document(; packets::Union{Preamble,Packet,Vector{Any}})::Document
+    if packets isa Packet
+        packets = [packets]
+    end
+
+    preamble_found = false
+    for packet in packets
+        if packet isa Preamble
+            preamble_found = true
+            break
+        end
+    end
+    if !preamble_found
+        error("Preamble not found in document.")
+    end
+
+    return Document(packets)
 end
