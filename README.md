@@ -49,7 +49,7 @@ p2 = Packet(
 )
 
 # Creating the document
-d = Document([p0, p1, p2])
+d = Document(; preamble = p0, packets = [p1, p2])
 
 # Printing the CZML file
 fileName = tempname() * ".czml"
@@ -58,9 +58,14 @@ printCZML(d, fileName)
 
 ## Contributing
 
-CZML.jl is a new package and any help is greatly appreciated. The following is a list of the highest priority items to do:
+CZML.jl is a new package and any help is greatly appreciated. The following is an unsorted list of the highest priority items to do:
 
-  - Finish adding unimplemented [CZML properties](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Packet)
-  - Expand testing
-  - Add better validation of properties
-  - Property validation functions should be executed after property creation
+  - Finish adding unimplemented [CZML properties](https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/)
+
+  - Expand validation of properties
+  - Expand testing. The following [Cesium Sandcastle](https://sandcastle.cesium.com/) examples are to be added:
+    
+      + [CZML Polygon - Intervals and Availability](https://sandcastle.cesium.com/?src=CZML%20Polygon%20-%20Intervals%2C%20Availability.html&label=CZML)
+      + [CZML Polygon - Interpolating References](https://sandcastle.cesium.com/?src=CZML%20Polygon%20-%20Interpolating%20References.html&label=CZML)
+      + [CZML Model Articulations](https://sandcastle.cesium.com/?src=CZML%20Model%20Articulations.html&label=CZML)
+      + [CZML Node Transformations](https://sandcastle.cesium.com/?src=CZML%20Model%20-%20Node%20Transformations.html&label=CZML)
