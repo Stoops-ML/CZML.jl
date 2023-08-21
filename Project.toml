@@ -1,7 +1,7 @@
 name = "CZML"
 uuid = "d3ddc7e8-7106-46d1-9902-15843705f60e"
 authors = ["Daniel Stoops"]
-version = "1.0.0"
+version = "1.1.0"
 
 [deps]
 Cascadia = "54eefc05-d75b-58de-a785-1a3403f0919f"
