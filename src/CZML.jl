@@ -210,7 +210,7 @@ function encodeProperties(property::CZML_TYPES_PROPERTIES)::Dict{String,Any}
 end
 
 function encodeDocument(document::Document)::Vector{Dict{String,Any}}
-    out = Vector{Dict{String,Any}}()
+    out = [encodeProperties(document.preamble)]
     for packet in document.packets
         push!(out, encodeProperties(packet))
     end

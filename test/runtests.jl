@@ -131,7 +131,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2])
+        d = Document(; preamble = p0, packets = [p1, p2])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -230,7 +230,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 pixelSize = 15,
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -352,7 +352,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -534,7 +534,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3, p4])
+        d = Document(; preamble = p0, packets = [p1, p2, p3, p4])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -675,7 +675,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 outlineColor = Color(; rgba = [255, 255, 0, 255]),
                 slicePartitions = 24,
                 stackPartitions = 36))
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -887,7 +887,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 width = 4,
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3, p4, p5])
+        d = Document(; preamble = p0, packets = [p1, p2, p3, p4, p5])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -1115,7 +1115,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2])
+        d = Document(; preamble = p0, packets = [p1, p2])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -1337,7 +1337,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3, p4])
+        d = Document(; preamble = p0, packets = [p1, p2, p3, p4])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -1471,7 +1471,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 pixelSize = 10,
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -1667,7 +1667,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -1725,7 +1725,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 pixelSize = 20,
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16159,7 +16159,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ],
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16294,7 +16294,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 outline = true,
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16340,7 +16340,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 minimumPixelSize = 128,
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16538,7 +16538,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 outlineColor = Color(; rgba = [255, 255, 255, 255]),
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16657,7 +16657,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 outlineColor = Color(; rgba = [255, 255, 0, 255]),
             ),
         )
-        d = Document(; packets = [p0, p1, p2, p3])
+        d = Document(; preamble = p0, packets = [p1, p2, p3])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16731,7 +16731,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 cartesian = [1216361.4096, -4736253.1753, 4081267.4865],
             ),
         )
-        d = Document(; packets = [p0, p1])
+        d = Document(; preamble = p0, packets = p1)
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16827,7 +16827,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 outlineColor = Color(; rgba = [0, 0, 0, 255]),
             ),
         )
-        d = Document(; packets = [p0, p1, p2])
+        d = Document(; preamble = p0, packets = [p1, p2])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
@@ -16923,7 +16923,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
                 ),
             ),
         )
-        d = Document(; packets = [p0, p1, p2])
+        d = Document(; preamble = p0, packets = [p1, p2])
         fileName = tempname() * ".czml"
         printCZML(d, fileName)
 
