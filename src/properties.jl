@@ -930,6 +930,39 @@ end
     scale::Union{Nothing,Vector{<:Real}} = nothing
 end
 
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Shape")
+struct Shape
+    cartesian2::Vector{<:Real}
+    deletable::Union{Nothing,Deletable}
+end
+function Shape(;
+    cartesian2::Vector{<:Real},
+    deletable::Union{Nothing,Deletable} = nothing,
+)::Shape
+    if mod(length(cartesian2), 2) != 0
+        error(
+            "The list of positions must be specified as two-dimensional Cartesian values [X, Y, X, Y, ...].",
+        )
+    end
+    Shape(cartesian2, deletable)
+end
+
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PolylineVolume")
+@with_kw struct PolylineVolume
+    show::Union{Nothing,Bool} = nothing
+    positions::Union{Nothing,PositionList}
+    shape::Union{Nothing,Shape}
+    cornerType::Union{Nothing,CornerTypes.T} = nothing
+    granularity::Union{Nothing,<:Real} = nothing
+    fill::Union{Nothing,Bool} = nothing
+    material::Union{Nothing,Material} = nothing
+    outline::Union{Nothing,Bool} = nothing
+    outlineColor::Union{Nothing,Color} = nothing
+    outlineWidth::Union{Nothing,<:Real} = nothing
+    shadows::Union{Nothing,ShadowModes.T} = nothing
+    distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
+end
+
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Model")
 @with_kw struct Model
     gltf::Union{Uri,String}
@@ -991,6 +1024,7 @@ end
     rectangle::Union{Nothing,Rectangle} = nothing
     tileset::Union{Nothing,TileSet} = nothing
     wall::Union{Nothing,Wall} = nothing
+    polylineVolume::Union{Nothing,PolylineVolume} = nothing
 end
 
 """
