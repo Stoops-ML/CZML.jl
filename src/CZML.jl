@@ -67,7 +67,8 @@ export InterpolationAlgorithms,
     Document,
     TimeInterval,
     PolylineVolume,
-    Shape
+    Shape,
+    PixelOffset
 
 # types
 export CZML_TYPES_ENUMS,
@@ -134,6 +135,7 @@ const CZML_TYPES_PROPERTIES = Union{
     Packet,
     Shape,
     PolylineVolume,
+    PixelOffset,
 }
 const CZML_TYPES_ENUMS = Union{
     InterpolationAlgorithms.T,
