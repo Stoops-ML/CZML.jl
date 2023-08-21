@@ -1,40 +1,61 @@
 using EnumX
+include("documenter.jl")
 
-# The interpolation algorithm to use when interpolating.
+"""
+# InterpolationAlgorithms
+
+The interpolation algorithm to use when interpolating.
+"""
 @enumx InterpolationAlgorithms begin
     LINEAR
     LAGRANGE
     HERMITE
 end
 
-# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CornerTypeValue
+@doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/CornerTypeValue")
 @enumx CornerTypes begin
     ROUNDED
     MITERED
     BEVELED
 end
 
-# The type of extrapolation to perform when a value is requested at a time after any available samples.
+"""
+# ExtrapolationTypes
+
+The type of extrapolation to perform when a value is requested at a time after any available samples.
+"""
 @enumx ExtrapolationTypes begin
     NONE
     HOLD
     EXTRAPOLATE
 end
 
-# The reference frame in which cartesian positions are specified.
+"""
+# ReferenceFrames
+
+The reference frame in which cartesian positions are specified.
+"""
 @enumx ReferenceFrames begin
     FIXED
     INERTIAL
 end
 
-# The style of a label.
+"""
+# LabelStyles
+
+The style of a label.
+"""
 @enumx LabelStyles begin
     FILL
     OUTLINE
     FILL_AND_OUTLINE
 end
 
-# The behavior of a clock when its current time reaches its start or end time.
+"""
+# ClockRanges
+
+The behavior of a clock when its current time reaches its start or end time.
+"""
 @enumx ClockRanges begin
     UNBOUNDED
     CLAMPED
@@ -54,7 +75,9 @@ end
     TOP
 end
 
-# https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/HorizontalOriginValue
+@doc makedoc(
+    "https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/HorizontalOriginValue",
+)
 @enumx HorizontalOrigins begin
     LEFT
     CENTER
