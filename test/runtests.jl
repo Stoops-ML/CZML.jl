@@ -3,6 +3,8 @@ using CZML
 using Test
 using Dates
 
+const FIXED_PI = 3.14159
+
 """
 Convert CZML string from Cesium Sandcastle to a Vector of CZML packets.
 """
@@ -10,6 +12,7 @@ function CZML_string_to_JSON(str_CZML::String)::Vector{Any}
     str_CZML = replace(str_CZML, r"// (.+)\n" => s"")  # remove comments
     str_CZML = replace(str_CZML, r",\s*([\]}])" => s"\1")  # remove comma before closing bracket
     str_CZML = replace(str_CZML, r"\s*([\[{,])\s*(\w+)\s*:" => s"\1\"\2\":")  # add double quotes to all keywords
+    str_CZML = replace(str_CZML, r"Math.PI" => FIXED_PI)
     return JSON.parse(str_CZML)
 end
 
