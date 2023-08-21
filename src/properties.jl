@@ -753,6 +753,7 @@ end
     distanceDisplayCondition::Union{Nothing,DistanceDisplayCondition} = nothing
     classificationType::Union{Nothing,ClassificationType} = nothing
     zIndex::Union{Nothing,Integer} = nothing
+    height::Union{Nothing,<:Real} = nothing
 end
 
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/Polyline")
