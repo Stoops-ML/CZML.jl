@@ -13,6 +13,7 @@ function CZML_string_to_JSON(str_CZML::String)::Vector{Any}
     str_CZML = replace(str_CZML, r",\s*([\]}])" => s"\1")  # remove comma before closing bracket
     str_CZML = replace(str_CZML, r"\s*([\[{,])\s*(\w+)\s*:" => s"\1\"\2\":")  # add double quotes to all keywords
     str_CZML = replace(str_CZML, r"Math.PI" => FIXED_PI)
+    str_CZML = replace(str_CZML, r"{\n? *\"number\": *(\d+(?:\.\d+)?)(?:,\n)? *}" => s"\1")  # replace Double types property with its' value
     return JSON.parse(str_CZML)
 end
 
