@@ -885,13 +885,13 @@ function EyeOffset(;
 end
 @doc makedoc("https://github.com/AnalyticalGraphicsInc/czml-writer/wiki/PixelOffset")
 struct PixelOffset
-    cartesian::Union{Nothing,Vector{<:Real}}
+    cartesian2::Union{Nothing,Vector{<:Real}}
     reference::Union{Nothing,String}
     deletable::Union{Nothing,Deletable}
     interpolatable::Union{Nothing,Interpolatable}
 end
 function PixelOffset(;
-    cartesian::Union{Nothing,Vector{<:Real}} = nothing,
+    cartesian2::Union{Nothing,Vector{<:Real}} = nothing,
     reference::Union{Nothing,String} = nothing,
     deletable::Union{Nothing,Deletable} = nothing,
     interpolatable::Union{Nothing,Interpolatable} = nothing,
@@ -899,22 +899,22 @@ function PixelOffset(;
     if 1 != sum(
         map(
             !isnothing,
-            [cartesian, reference],
+            [cartesian2, reference],
         ),
     )
         error(
-            "One and only one of cartesian or reference must be given.",
+            "One and only one of cartesian2 or reference must be given.",
         )
     end
-    if !isnothing(cartesian)
-        if length(cartesian) != 2
+    if !isnothing(cartesian2)
+        if length(cartesian2) != 2
             error(
-                "cartesian must have 2 values.",
+                "cartesian2 must have 2 values.",
             )
         end
     end
     return PixelOffset(
-        cartesian,
+        cartesian2,
         reference,
         deletable,
         interpolatable,
