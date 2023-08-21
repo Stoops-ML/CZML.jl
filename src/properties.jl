@@ -701,7 +701,7 @@ end
     arcType::Union{Nothing,ArcTypes.T} = nothing
     width::Union{Nothing,Real} = nothing
     granularity::Union{Nothing,Real} = nothing
-    material::Union{Nothing,Material} = nothing
+    material::Union{Nothing,PolylineMaterial} = nothing
     followSurface::Union{Nothing,Bool} = nothing
     shadows::Union{Nothing,ShadowModes.T} = nothing
     depthFailMaterial::Union{Nothing,PolylineMaterial} = nothing
