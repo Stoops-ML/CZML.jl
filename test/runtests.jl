@@ -544,6 +544,7 @@ Some of the expected results may have been minimally modifed from Cesium Sandcas
     end
 
     @testset "CZML Spheres and Ellipsoids" begin
+        # https://sandcastle.cesium.com/?src=CZML%20Spheres%20and%20Ellipsoids.html&label=CZML
         str_CZML = """[
             {
               id: "document",

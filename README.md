@@ -56,6 +56,8 @@ fileName = tempname() * ".czml"
 printCZML(d, fileName)
 ```
 
+More examples can be found in the [examples](examples/) folder.
+
 ## Contributing
 
 CZML.jl is a new package and any help is greatly appreciated. The following is an unsorted list of the highest priority items to do:
