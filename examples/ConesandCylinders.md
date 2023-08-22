@@ -2,7 +2,7 @@
 
 ## CZML File
 
-This example was taken from Cesium Sandcastle [here](#https://sandcastle.cesium.com/?src=CZML%20Cones%20and%20Cylinders.html&label=CZML).
+This example was taken from Cesium Sandcastle [here](https://sandcastle.cesium.com/?src=CZML%20Cones%20and%20Cylinders.html&label=CZML).
 
 ```
 [

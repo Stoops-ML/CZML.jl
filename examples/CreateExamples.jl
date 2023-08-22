@@ -43,7 +43,7 @@ function writeexamples()
                         "# ",
                         test_name,
                         "\n",
-                        "## CZML File\n\nThis example was taken from Cesium Sandcastle [here](#",
+                        "## CZML File\n\nThis example was taken from Cesium Sandcastle [here](",
                         str_url,
                         ").\n\n```\n",
                         str_CZML,
